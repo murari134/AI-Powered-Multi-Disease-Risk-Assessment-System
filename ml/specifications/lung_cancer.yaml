@@ -1,0 +1,236 @@
+# MediRisk 2.0 — Disease Dataset Specification: LUNG_CANCER
+# Schema Version: 1.0.0
+# Dataset Version: 1.0.0
+# Phase: 7A — Specification Only (no data generated yet)
+
+dataset_identifier: "lung_cancer"
+dataset_version: "1.0.0"
+schema_version: "1.0.0"
+status: "SPECIFICATION_ONLY"
+created: "2026-09-26"
+
+disclaimer: >
+  This is a SYNTHETIC RESEARCH dataset. It does NOT represent real patient data
+  and has NOT been clinically validated. No medical decisions should be based
+  on this specification or any model trained on it.
+
+# -----------------------------------------------
+# Target Definition
+# -----------------------------------------------
+target:
+  column: "lung_cancer_outcome"
+  type: "binary"
+  negative_class:
+    value: 0
+    meaning: "No lung cancer"
+  positive_class:
+    value: 1
+    meaning: "Lung cancer present"
+  task: "binary_classification"
+
+# -----------------------------------------------
+# Class Balance
+# -----------------------------------------------
+class_balance:
+  intended_positive_proportion: 0.35
+  acceptable_range: [0.25, 0.45]
+  validation_rule: "assert 0.25 <= positive_rate <= 0.45"
+  balance_justification: "Synthetic screening-enriched cohort. Not epidemiologically sourced."
+
+# -----------------------------------------------
+# Features
+# -----------------------------------------------
+features:
+  - name: "age"
+    type: "numerical"
+    unit: "years"
+    domain: [18, 90]
+    missing_allowed: false
+    description: "Age of the individual"
+
+  - name: "sex"
+    type: "categorical"
+    domain: ["male", "female"]
+    missing_allowed: false
+    description: "Biological sex"
+
+  - name: "smoking_status"
+    type: "categorical"
+    domain: ["never", "former", "current"]
+    missing_allowed: false
+    description: "Smoking history (critical risk factor)"
+
+  - name: "pack_years"
+    type: "numerical"
+    unit: "pack-years"
+    domain: [0, 100]
+    missing_allowed: true
+    max_missing_pct: 20
+    description: "Cumulative smoking exposure in pack-years (0 for never-smokers)"
+
+  - name: "years_since_quitting"
+    type: "numerical"
+    unit: "years"
+    domain: [0, 50]
+    missing_allowed: true
+    max_missing_pct: 30
+    description: "Years since quitting (0 for current/never smokers)"
+
+  - name: "chronic_cough"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = persistent chronic cough (self-reported)"
+
+  - name: "shortness_of_breath"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = self-reported shortness of breath"
+
+  - name: "chest_pain"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = self-reported chest pain"
+
+  - name: "hemoptysis"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = coughing up blood (self-reported)"
+
+  - name: "weight_loss_unexplained"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = unexplained weight loss reported"
+
+  - name: "fatigue"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = chronic fatigue reported"
+
+  - name: "wheezing"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = wheezing present"
+
+  - name: "radon_exposure"
+    type: "categorical"
+    domain: ["none", "low", "moderate", "high"]
+    missing_allowed: true
+    max_missing_pct: 20
+    description: "Estimated radon gas exposure level (synthetic)"
+
+  - name: "occupational_carcinogen_exposure"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = occupational exposure to known carcinogens (asbestos, silica, etc.)"
+
+  - name: "family_history_lung_cancer"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = first-degree relative with lung cancer"
+
+  - name: "copd_flag"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = existing COPD diagnosis"
+
+  - name: "bmi"
+    type: "numerical"
+    unit: "kg/m²"
+    domain: [15.0, 60.0]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Body Mass Index"
+
+  - name: "alcohol_consumption"
+    type: "categorical"
+    domain: ["none", "light", "moderate", "heavy"]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Self-reported alcohol consumption (synthetic)"
+
+# -----------------------------------------------
+# Feature Category Lists
+# -----------------------------------------------
+numerical_features:
+  - age
+  - pack_years
+  - years_since_quitting
+  - bmi
+
+categorical_features:
+  - sex
+  - smoking_status
+  - radon_exposure
+  - alcohol_consumption
+
+binary_features:
+  - chronic_cough
+  - shortness_of_breath
+  - chest_pain
+  - hemoptysis
+  - weight_loss_unexplained
+  - fatigue
+  - wheezing
+  - occupational_carcinogen_exposure
+  - family_history_lung_cancer
+  - copd_flag
+
+# -----------------------------------------------
+# Leakage Risks
+# -----------------------------------------------
+leakage_risks:
+  - field: "hemoptysis"
+    risk: "HIGH"
+    note: >
+      Hemoptysis (coughing up blood) can be a presenting symptom
+      that triggers the diagnostic workup itself. If this variable
+      is recorded after diagnosis it constitutes leakage.
+      Only pre-diagnosis self-report is acceptable.
+  - field: "weight_loss_unexplained"
+    risk: "MEDIUM"
+    note: "Unexplained weight loss can be both a symptom and a consequence; pre-diagnosis only."
+
+# -----------------------------------------------
+# Prohibited Fields
+# -----------------------------------------------
+prohibited_fields:
+  - "ct_scan_result"
+  - "biopsy_pathology"
+  - "cancer_stage"
+  - "chemotherapy_regimen"
+  - "radiation_therapy"
+  - "risk_level"
+  - "calibrated_probability"
+  - "prediction_result"
+
+# -----------------------------------------------
+# Dataset Generation Requirements (Phase 7B)
+# -----------------------------------------------
+generation:
+  method: "synthetic"
+  target_records: 5000
+  random_seed: 42
+  generator_version: "TBD"
+  validation_required: true
+  note: "DO NOT generate yet. Phase 7B only."
+
+# -----------------------------------------------
+# Preprocessing Requirements
+# -----------------------------------------------
+preprocessing:
+  numerical: "StandardScaler (fit on train only)"
+  categorical: "OrdinalEncoder (fit on train only)"
+  binary: "passthrough"
+  missing_numerical: "median imputation + missingness indicator"
+  missing_categorical: "most_frequent imputation + missingness indicator"
+  feature_order: "fixed — see features list above"

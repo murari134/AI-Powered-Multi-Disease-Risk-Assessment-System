@@ -1,0 +1,236 @@
+# MediRisk 2.0 — Disease Dataset Specification: LIVER_DISEASE
+# Schema Version: 1.0.0
+# Dataset Version: 1.0.0
+# Phase: 7A — Specification Only (no data generated yet)
+
+dataset_identifier: "liver_disease"
+dataset_version: "1.0.0"
+schema_version: "1.0.0"
+status: "SPECIFICATION_ONLY"
+created: "2026-09-26"
+
+disclaimer: >
+  This is a SYNTHETIC RESEARCH dataset. It does NOT represent real patient data
+  and has NOT been clinically validated. No medical decisions should be based
+  on this specification or any model trained on it.
+
+# -----------------------------------------------
+# Target Definition
+# -----------------------------------------------
+target:
+  column: "liver_disease_outcome"
+  type: "binary"
+  negative_class:
+    value: 0
+    meaning: "No liver disease"
+  positive_class:
+    value: 1
+    meaning: "Liver disease present"
+  task: "binary_classification"
+  note: >
+    'Liver disease' is a broad category covering NAFLD, cirrhosis,
+    hepatitis, and related conditions in this synthetic prototype.
+    The exact sub-type is not discriminated in the target.
+
+# -----------------------------------------------
+# Class Balance
+# -----------------------------------------------
+class_balance:
+  intended_positive_proportion: 0.38
+  acceptable_range: [0.28, 0.48]
+  validation_rule: "assert 0.28 <= positive_rate <= 0.48"
+  balance_justification: "Synthetic screening cohort. Not epidemiologically sourced."
+
+# -----------------------------------------------
+# Features
+# -----------------------------------------------
+features:
+  - name: "age"
+    type: "numerical"
+    unit: "years"
+    domain: [18, 90]
+    missing_allowed: false
+    description: "Age of the individual"
+
+  - name: "sex"
+    type: "categorical"
+    domain: ["male", "female"]
+    missing_allowed: false
+    description: "Biological sex"
+
+  - name: "total_bilirubin"
+    type: "numerical"
+    unit: "mg/dL"
+    domain: [0.1, 30.0]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Total bilirubin (synthetic proxy)"
+
+  - name: "direct_bilirubin"
+    type: "numerical"
+    unit: "mg/dL"
+    domain: [0.0, 20.0]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Direct bilirubin (synthetic proxy)"
+
+  - name: "alkaline_phosphatase"
+    type: "numerical"
+    unit: "IU/L"
+    domain: [20, 2000]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Alkaline phosphatase enzyme level"
+
+  - name: "alt"
+    type: "numerical"
+    unit: "IU/L"
+    domain: [5, 2000]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Alanine aminotransferase (ALT / SGPT)"
+
+  - name: "ast"
+    type: "numerical"
+    unit: "IU/L"
+    domain: [5, 2000]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Aspartate aminotransferase (AST / SGOT)"
+
+  - name: "total_proteins"
+    type: "numerical"
+    unit: "g/dL"
+    domain: [3.0, 12.0]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Total serum proteins"
+
+  - name: "albumin"
+    type: "numerical"
+    unit: "g/dL"
+    domain: [1.0, 6.0]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Serum albumin"
+
+  - name: "albumin_globulin_ratio"
+    type: "numerical"
+    unit: "ratio"
+    domain: [0.3, 3.0]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Albumin/globulin ratio"
+
+  - name: "bmi"
+    type: "numerical"
+    unit: "kg/m²"
+    domain: [15.0, 60.0]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Body Mass Index"
+
+  - name: "alcohol_consumption"
+    type: "categorical"
+    domain: ["none", "light", "moderate", "heavy"]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Self-reported alcohol consumption level (synthetic)"
+
+  - name: "smoking_status"
+    type: "categorical"
+    domain: ["never", "former", "current"]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Smoking history"
+
+  - name: "diabetes_flag"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = existing diabetes diagnosis"
+
+  - name: "hypertension_flag"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = existing hypertension diagnosis"
+
+# -----------------------------------------------
+# Feature Category Lists
+# -----------------------------------------------
+numerical_features:
+  - age
+  - total_bilirubin
+  - direct_bilirubin
+  - alkaline_phosphatase
+  - alt
+  - ast
+  - total_proteins
+  - albumin
+  - albumin_globulin_ratio
+  - bmi
+
+categorical_features:
+  - sex
+  - alcohol_consumption
+  - smoking_status
+
+binary_features:
+  - diabetes_flag
+  - hypertension_flag
+
+# -----------------------------------------------
+# Leakage Risks
+# -----------------------------------------------
+leakage_risks:
+  - field: "alt"
+    risk: "HIGH"
+    note: >
+      ALT is a primary liver function marker. Very high ALT values
+      are near-diagnostic for liver disease. Screening-level values
+      are acceptable; post-diagnosis treatment monitoring values
+      constitute leakage.
+  - field: "ast"
+    risk: "HIGH"
+    note: "Same restrictions as ALT."
+  - field: "total_bilirubin"
+    risk: "HIGH"
+    note: "Elevated bilirubin is a diagnostic marker for liver dysfunction."
+  - field: "albumin"
+    risk: "MEDIUM"
+    note: "Low albumin is a consequence of advanced liver disease."
+
+# -----------------------------------------------
+# Prohibited Fields
+# -----------------------------------------------
+prohibited_fields:
+  - "liver_biopsy_result"
+  - "prescribed_antiviral"
+  - "transplant_status"
+  - "child_pugh_score"
+  - "risk_level"
+  - "calibrated_probability"
+  - "prediction_result"
+
+# -----------------------------------------------
+# Dataset Generation Requirements (Phase 7B)
+# -----------------------------------------------
+generation:
+  method: "synthetic"
+  target_records: 5000
+  random_seed: 42
+  generator_version: "TBD"
+  validation_required: true
+  note: "DO NOT generate yet. Phase 7B only."
+
+# -----------------------------------------------
+# Preprocessing Requirements
+# -----------------------------------------------
+preprocessing:
+  numerical: "StandardScaler (fit on train only)"
+  categorical: "OrdinalEncoder (fit on train only)"
+  binary: "passthrough"
+  missing_numerical: "median imputation + missingness indicator"
+  missing_categorical: "most_frequent imputation + missingness indicator"
+  feature_order: "fixed — see features list above"

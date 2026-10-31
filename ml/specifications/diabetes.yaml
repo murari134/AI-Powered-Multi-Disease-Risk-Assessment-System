@@ -1,0 +1,230 @@
+# MediRisk 2.0 — Disease Dataset Specification: DIABETES
+# Schema Version: 1.0.0
+# Dataset Version: 1.0.0
+# Phase: 7A — Specification Only (no data generated yet)
+
+dataset_identifier: "diabetes"
+dataset_version: "1.0.0"
+schema_version: "1.0.0"
+status: "SPECIFICATION_ONLY"
+created: "2026-09-26"
+
+disclaimer: >
+  This is a SYNTHETIC RESEARCH dataset. It does NOT represent real patient data
+  and has NOT been clinically validated. No medical decisions should be based
+  on this specification or any model trained on it.
+
+# -----------------------------------------------
+# Target Definition
+# -----------------------------------------------
+target:
+  column: "diabetes_outcome"
+  type: "binary"
+  negative_class:
+    value: 0
+    meaning: "No diabetes diagnosis"
+  positive_class:
+    value: 1
+    meaning: "Diabetes diagnosis (Type 2 or unspecified)"
+  task: "binary_classification"
+  note: >
+    The model predicts disease-class probability only.
+    The risk engine (Phase 8) transforms calibrated probability
+    into LOW / MODERATE / HIGH — not implemented here.
+
+# -----------------------------------------------
+# Class Balance
+# -----------------------------------------------
+class_balance:
+  intended_positive_proportion: 0.35
+  acceptable_range: [0.25, 0.45]
+  validation_rule: "assert 0.25 <= positive_rate <= 0.45"
+  balance_justification: >
+    Reflects approximate synthetic prevalence for a high-risk
+    screening cohort. NOT derived from epidemiological data.
+    Synthetic distribution is clearly synthetic.
+
+# -----------------------------------------------
+# Features
+# -----------------------------------------------
+features:
+  - name: "age"
+    type: "numerical"
+    unit: "years"
+    domain: [18, 90]
+    missing_allowed: false
+    description: "Age of the individual in years (prototype synthetic range)"
+
+  - name: "bmi"
+    type: "numerical"
+    unit: "kg/m²"
+    domain: [15.0, 60.0]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Body Mass Index"
+
+  - name: "glucose_level"
+    type: "numerical"
+    unit: "mg/dL"
+    domain: [50, 300]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Fasting plasma glucose (synthetic proxy)"
+
+  - name: "blood_pressure_systolic"
+    type: "numerical"
+    unit: "mmHg"
+    domain: [70, 200]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Systolic blood pressure"
+
+  - name: "blood_pressure_diastolic"
+    type: "numerical"
+    unit: "mmHg"
+    domain: [40, 130]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Diastolic blood pressure"
+
+  - name: "insulin_level"
+    type: "numerical"
+    unit: "µU/mL"
+    domain: [0, 900]
+    missing_allowed: true
+    max_missing_pct: 20
+    description: "Serum insulin (synthetic proxy, high missingness expected)"
+
+  - name: "skin_thickness"
+    type: "numerical"
+    unit: "mm"
+    domain: [0, 100]
+    missing_allowed: true
+    max_missing_pct: 20
+    description: "Triceps skin fold thickness (prototype synthetic variable)"
+
+  - name: "diabetes_pedigree"
+    type: "numerical"
+    unit: "score"
+    domain: [0.0, 2.5]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Synthetic diabetes family history score (prototype variable)"
+
+  - name: "num_pregnancies"
+    type: "numerical"
+    unit: "count"
+    domain: [0, 20]
+    missing_allowed: false
+    description: "Number of pregnancies (0 for males)"
+
+  - name: "sex"
+    type: "categorical"
+    domain: ["male", "female"]
+    missing_allowed: false
+    description: "Biological sex"
+
+  - name: "smoking_status"
+    type: "categorical"
+    domain: ["never", "former", "current"]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Smoking history (synthetic)"
+
+  - name: "physical_activity"
+    type: "categorical"
+    domain: ["sedentary", "light", "moderate", "active"]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Self-reported physical activity level (synthetic)"
+
+  - name: "family_history_diabetes"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = first-degree relative with diabetes"
+
+  - name: "hypertension_flag"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = existing hypertension diagnosis"
+
+# -----------------------------------------------
+# Numerical Features
+# -----------------------------------------------
+numerical_features:
+  - age
+  - bmi
+  - glucose_level
+  - blood_pressure_systolic
+  - blood_pressure_diastolic
+  - insulin_level
+  - skin_thickness
+  - diabetes_pedigree
+  - num_pregnancies
+
+# -----------------------------------------------
+# Categorical Features
+# -----------------------------------------------
+categorical_features:
+  - sex
+  - smoking_status
+  - physical_activity
+
+# -----------------------------------------------
+# Binary Features
+# -----------------------------------------------
+binary_features:
+  - family_history_diabetes
+  - hypertension_flag
+
+# -----------------------------------------------
+# Leakage Risks
+# -----------------------------------------------
+leakage_risks:
+  - field: "glucose_level"
+    risk: "MEDIUM"
+    note: >
+      High fasting glucose is a direct diagnostic criterion for
+      diabetes. In a real pre-screening dataset this would be
+      acceptable. In a synthetic dataset correlations are
+      intentionally seeded. Must not use post-diagnosis glucose.
+  - field: "insulin_level"
+    risk: "MEDIUM"
+    note: "Insulin therapy values would constitute leakage; only pre-diagnosis values are acceptable."
+
+# -----------------------------------------------
+# Prohibited Fields
+# -----------------------------------------------
+prohibited_fields:
+  - "diagnosis_date"
+  - "treatment_prescribed"
+  - "hba1c_post_treatment"
+  - "medication_name"
+  - "risk_level"
+  - "calibrated_probability"
+  - "prediction_result"
+
+# -----------------------------------------------
+# Dataset Generation Requirements (Phase 7B)
+# -----------------------------------------------
+generation:
+  method: "synthetic"
+  target_records: 5000
+  random_seed: 42
+  generator_version: "TBD"
+  validation_required: true
+  schema_validation: true
+  note: "DO NOT generate yet. Phase 7B only."
+
+# -----------------------------------------------
+# Preprocessing Requirements
+# -----------------------------------------------
+preprocessing:
+  numerical: "StandardScaler (fit on train only)"
+  categorical: "OrdinalEncoder (fit on train only)"
+  binary: "passthrough"
+  missing_numerical: "median imputation + missingness indicator"
+  missing_categorical: "most_frequent imputation + missingness indicator"
+  feature_order: "fixed — see features list above"

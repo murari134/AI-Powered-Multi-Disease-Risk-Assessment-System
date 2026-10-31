@@ -1,0 +1,233 @@
+# MediRisk 2.0 — Disease Dataset Specification: HEART_DISEASE
+# Schema Version: 1.0.0
+# Dataset Version: 1.0.0
+# Phase: 7A — Specification Only (no data generated yet)
+
+dataset_identifier: "heart_disease"
+dataset_version: "1.0.0"
+schema_version: "1.0.0"
+status: "SPECIFICATION_ONLY"
+created: "2026-09-26"
+
+disclaimer: >
+  This is a SYNTHETIC RESEARCH dataset. It does NOT represent real patient data
+  and has NOT been clinically validated. No medical decisions should be based
+  on this specification or any model trained on it.
+
+# -----------------------------------------------
+# Target Definition
+# -----------------------------------------------
+target:
+  column: "heart_disease_outcome"
+  type: "binary"
+  negative_class:
+    value: 0
+    meaning: "No coronary heart disease"
+  positive_class:
+    value: 1
+    meaning: "Coronary heart disease present"
+  task: "binary_classification"
+
+# -----------------------------------------------
+# Class Balance
+# -----------------------------------------------
+class_balance:
+  intended_positive_proportion: 0.40
+  acceptable_range: [0.30, 0.50]
+  validation_rule: "assert 0.30 <= positive_rate <= 0.50"
+  balance_justification: "Synthetic screening-cohort distribution. Not epidemiologically sourced."
+
+# -----------------------------------------------
+# Features
+# -----------------------------------------------
+features:
+  - name: "age"
+    type: "numerical"
+    unit: "years"
+    domain: [18, 90]
+    missing_allowed: false
+    description: "Age of the individual"
+
+  - name: "sex"
+    type: "categorical"
+    domain: ["male", "female"]
+    missing_allowed: false
+    description: "Biological sex"
+
+  - name: "chest_pain_type"
+    type: "categorical"
+    domain: ["typical_angina", "atypical_angina", "non_anginal", "asymptomatic"]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Self-reported or clinician-noted chest pain classification (synthetic)"
+
+  - name: "resting_blood_pressure"
+    type: "numerical"
+    unit: "mmHg"
+    domain: [70, 200]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Resting systolic blood pressure"
+
+  - name: "cholesterol_total"
+    type: "numerical"
+    unit: "mg/dL"
+    domain: [100, 600]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Serum total cholesterol (synthetic proxy)"
+
+  - name: "fasting_blood_sugar_high"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = fasting blood sugar > 120 mg/dL"
+
+  - name: "resting_ecg"
+    type: "categorical"
+    domain: ["normal", "st_t_abnormality", "left_ventricular_hypertrophy"]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Resting ECG result (synthetic categorical)"
+
+  - name: "max_heart_rate"
+    type: "numerical"
+    unit: "bpm"
+    domain: [60, 220]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Maximum heart rate achieved (synthetic)"
+
+  - name: "exercise_induced_angina"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "1 = exercise-induced angina reported"
+
+  - name: "st_depression"
+    type: "numerical"
+    unit: "mm"
+    domain: [0.0, 7.0]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "ST depression induced by exercise relative to rest (synthetic)"
+
+  - name: "slope_peak_st"
+    type: "categorical"
+    domain: ["upsloping", "flat", "downsloping"]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Slope of peak exercise ST segment (synthetic)"
+
+  - name: "num_major_vessels"
+    type: "numerical"
+    unit: "count"
+    domain: [0, 3]
+    missing_allowed: true
+    max_missing_pct: 20
+    description: "Number of major vessels colored by fluoroscopy (synthetic, high missingness)"
+
+  - name: "thalassemia_type"
+    type: "categorical"
+    domain: ["normal", "fixed_defect", "reversible_defect"]
+    missing_allowed: true
+    max_missing_pct: 20
+    description: "Thalassemia classification (synthetic, high missingness)"
+
+  - name: "smoking_status"
+    type: "categorical"
+    domain: ["never", "former", "current"]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Smoking history"
+
+  - name: "diabetes_flag"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = existing diabetes diagnosis"
+
+  - name: "bmi"
+    type: "numerical"
+    unit: "kg/m²"
+    domain: [15.0, 60.0]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Body Mass Index"
+
+# -----------------------------------------------
+# Feature Category Lists
+# -----------------------------------------------
+numerical_features:
+  - age
+  - resting_blood_pressure
+  - cholesterol_total
+  - max_heart_rate
+  - st_depression
+  - num_major_vessels
+  - bmi
+
+categorical_features:
+  - sex
+  - chest_pain_type
+  - resting_ecg
+  - slope_peak_st
+  - thalassemia_type
+  - smoking_status
+
+binary_features:
+  - fasting_blood_sugar_high
+  - exercise_induced_angina
+  - diabetes_flag
+
+# -----------------------------------------------
+# Leakage Risks
+# -----------------------------------------------
+leakage_risks:
+  - field: "num_major_vessels"
+    risk: "HIGH"
+    note: >
+      Fluoroscopy results are typically part of post-screening
+      investigations. In a pre-diagnosis context this is
+      acceptable, but post-diagnosis values must be excluded.
+  - field: "st_depression"
+    risk: "MEDIUM"
+    note: "Exercise test values may be acquired close to or during diagnostic workup."
+  - field: "thalassemia_type"
+    risk: "MEDIUM"
+    note: "Thallium stress test is an investigative procedure; post-diagnosis values prohibited."
+
+# -----------------------------------------------
+# Prohibited Fields
+# -----------------------------------------------
+prohibited_fields:
+  - "cardiac_catheterization_result"
+  - "post_event_ejection_fraction"
+  - "stent_placement"
+  - "medication_name"
+  - "risk_level"
+  - "calibrated_probability"
+  - "prediction_result"
+
+# -----------------------------------------------
+# Dataset Generation Requirements (Phase 7B)
+# -----------------------------------------------
+generation:
+  method: "synthetic"
+  target_records: 5000
+  random_seed: 42
+  generator_version: "TBD"
+  validation_required: true
+  note: "DO NOT generate yet. Phase 7B only."
+
+# -----------------------------------------------
+# Preprocessing Requirements
+# -----------------------------------------------
+preprocessing:
+  numerical: "StandardScaler (fit on train only)"
+  categorical: "OrdinalEncoder (fit on train only)"
+  binary: "passthrough"
+  missing_numerical: "median imputation + missingness indicator"
+  missing_categorical: "most_frequent imputation + missingness indicator"
+  feature_order: "fixed — see features list above"

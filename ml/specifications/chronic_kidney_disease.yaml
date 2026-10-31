@@ -1,0 +1,263 @@
+# MediRisk 2.0 — Disease Dataset Specification: CHRONIC_KIDNEY_DISEASE
+# Schema Version: 1.0.0
+# Dataset Version: 1.0.0
+# Phase: 7A — Specification Only (no data generated yet)
+
+dataset_identifier: "chronic_kidney_disease"
+dataset_version: "1.0.0"
+schema_version: "1.0.0"
+status: "SPECIFICATION_ONLY"
+created: "2026-09-26"
+
+disclaimer: >
+  This is a SYNTHETIC RESEARCH dataset. It does NOT represent real patient data
+  and has NOT been clinically validated. No medical decisions should be based
+  on this specification or any model trained on it.
+
+# -----------------------------------------------
+# Target Definition
+# -----------------------------------------------
+target:
+  column: "ckd_outcome"
+  type: "binary"
+  negative_class:
+    value: 0
+    meaning: "No chronic kidney disease"
+  positive_class:
+    value: 1
+    meaning: "Chronic kidney disease present"
+  task: "binary_classification"
+
+# -----------------------------------------------
+# Class Balance
+# -----------------------------------------------
+class_balance:
+  intended_positive_proportion: 0.35
+  acceptable_range: [0.25, 0.45]
+  validation_rule: "assert 0.25 <= positive_rate <= 0.45"
+  balance_justification: "Synthetic screening-cohort rate. Not epidemiologically sourced."
+
+# -----------------------------------------------
+# Features
+# -----------------------------------------------
+features:
+  - name: "age"
+    type: "numerical"
+    unit: "years"
+    domain: [18, 90]
+    missing_allowed: false
+    description: "Age of the individual"
+
+  - name: "sex"
+    type: "categorical"
+    domain: ["male", "female"]
+    missing_allowed: false
+    description: "Biological sex"
+
+  - name: "blood_pressure_systolic"
+    type: "numerical"
+    unit: "mmHg"
+    domain: [70, 220]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Systolic blood pressure"
+
+  - name: "blood_glucose_random"
+    type: "numerical"
+    unit: "mg/dL"
+    domain: [50, 500]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Random blood glucose (synthetic proxy)"
+
+  - name: "blood_urea"
+    type: "numerical"
+    unit: "mg/dL"
+    domain: [5, 300]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Blood urea nitrogen (synthetic proxy)"
+
+  - name: "serum_creatinine"
+    type: "numerical"
+    unit: "mg/dL"
+    domain: [0.4, 15.0]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: >
+      Serum creatinine (HIGH LEAKAGE RISK — see leakage section).
+      Only pre-diagnosis values acceptable.
+
+  - name: "sodium"
+    type: "numerical"
+    unit: "mEq/L"
+    domain: [115, 165]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Serum sodium"
+
+  - name: "potassium"
+    type: "numerical"
+    unit: "mEq/L"
+    domain: [2.5, 8.0]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Serum potassium"
+
+  - name: "hemoglobin"
+    type: "numerical"
+    unit: "g/dL"
+    domain: [5.0, 20.0]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Hemoglobin level"
+
+  - name: "packed_cell_volume"
+    type: "numerical"
+    unit: "percent"
+    domain: [15, 65]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Packed cell volume (hematocrit)"
+
+  - name: "white_blood_cell_count"
+    type: "numerical"
+    unit: "cells/µL"
+    domain: [2000, 20000]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "White blood cell count"
+
+  - name: "red_blood_cell_count"
+    type: "numerical"
+    unit: "million/µL"
+    domain: [2.0, 7.0]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Red blood cell count"
+
+  - name: "hypertension_flag"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = existing hypertension diagnosis"
+
+  - name: "diabetes_flag"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = existing diabetes diagnosis"
+
+  - name: "anemia_flag"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = anemia present"
+
+  - name: "urine_albumin"
+    type: "categorical"
+    domain: ["normal", "abnormal"]
+    missing_allowed: true
+    max_missing_pct: 20
+    description: "Urine albumin test result (synthetic)"
+
+  - name: "urine_sugar"
+    type: "categorical"
+    domain: ["normal", "abnormal"]
+    missing_allowed: true
+    max_missing_pct: 20
+    description: "Urine sugar test result (synthetic)"
+
+  - name: "pus_cell"
+    type: "categorical"
+    domain: ["normal", "abnormal"]
+    missing_allowed: true
+    max_missing_pct: 20
+    description: "Urine pus cell (synthetic)"
+
+  - name: "bacteria_in_urine"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: true
+    max_missing_pct: 20
+    description: "1 = bacteria present in urine"
+
+# -----------------------------------------------
+# Feature Category Lists
+# -----------------------------------------------
+numerical_features:
+  - age
+  - blood_pressure_systolic
+  - blood_glucose_random
+  - blood_urea
+  - serum_creatinine
+  - sodium
+  - potassium
+  - hemoglobin
+  - packed_cell_volume
+  - white_blood_cell_count
+  - red_blood_cell_count
+
+categorical_features:
+  - sex
+  - urine_albumin
+  - urine_sugar
+  - pus_cell
+
+binary_features:
+  - hypertension_flag
+  - diabetes_flag
+  - anemia_flag
+  - bacteria_in_urine
+
+# -----------------------------------------------
+# Leakage Risks
+# -----------------------------------------------
+leakage_risks:
+  - field: "serum_creatinine"
+    risk: "HIGH"
+    note: >
+      Elevated serum creatinine is a primary diagnostic marker for
+      CKD. In a screening context pre-diagnosis values are acceptable.
+      Post-diagnosis creatinine values (e.g., during treatment) constitute
+      direct leakage and must be excluded.
+  - field: "blood_urea"
+    risk: "HIGH"
+    note: "Blood urea nitrogen is a core CKD biomarker — same restrictions as creatinine."
+  - field: "hemoglobin"
+    risk: "MEDIUM"
+    note: "Anemia of chronic kidney disease may be a consequence, not just a risk factor."
+
+# -----------------------------------------------
+# Prohibited Fields
+# -----------------------------------------------
+prohibited_fields:
+  - "dialysis_type"
+  - "transplant_status"
+  - "gfr_stage"
+  - "post_diagnosis_creatinine"
+  - "risk_level"
+  - "calibrated_probability"
+  - "prediction_result"
+
+# -----------------------------------------------
+# Dataset Generation Requirements (Phase 7B)
+# -----------------------------------------------
+generation:
+  method: "synthetic"
+  target_records: 5000
+  random_seed: 42
+  generator_version: "TBD"
+  validation_required: true
+  note: "DO NOT generate yet. Phase 7B only."
+
+# -----------------------------------------------
+# Preprocessing Requirements
+# -----------------------------------------------
+preprocessing:
+  numerical: "StandardScaler (fit on train only)"
+  categorical: "OrdinalEncoder (fit on train only)"
+  binary: "passthrough"
+  missing_numerical: "median imputation + missingness indicator"
+  missing_categorical: "most_frequent imputation + missingness indicator"
+  feature_order: "fixed — see features list above"

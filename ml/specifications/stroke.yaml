@@ -1,0 +1,201 @@
+# MediRisk 2.0 — Disease Dataset Specification: STROKE
+# Schema Version: 1.0.0
+# Dataset Version: 1.0.0
+# Phase: 7A — Specification Only (no data generated yet)
+
+dataset_identifier: "stroke"
+dataset_version: "1.0.0"
+schema_version: "1.0.0"
+status: "SPECIFICATION_ONLY"
+created: "2026-09-26"
+
+disclaimer: >
+  This is a SYNTHETIC RESEARCH dataset. It does NOT represent real patient data
+  and has NOT been clinically validated. No medical decisions should be based
+  on this specification or any model trained on it.
+
+# -----------------------------------------------
+# Target Definition
+# -----------------------------------------------
+target:
+  column: "stroke_outcome"
+  type: "binary"
+  negative_class:
+    value: 0
+    meaning: "No stroke event"
+  positive_class:
+    value: 1
+    meaning: "Stroke event occurred"
+  task: "binary_classification"
+
+# -----------------------------------------------
+# Class Balance
+# -----------------------------------------------
+class_balance:
+  intended_positive_proportion: 0.25
+  acceptable_range: [0.15, 0.35]
+  validation_rule: "assert 0.15 <= positive_rate <= 0.35"
+  balance_justification: >
+    Stroke is relatively rare in general populations. The
+    synthetic dataset uses a higher positive rate than real
+    prevalence to avoid extreme class imbalance. Clearly
+    synthetic and not epidemiologically sourced.
+
+# -----------------------------------------------
+# Features
+# -----------------------------------------------
+features:
+  - name: "age"
+    type: "numerical"
+    unit: "years"
+    domain: [18, 95]
+    missing_allowed: false
+    description: "Age of the individual"
+
+  - name: "sex"
+    type: "categorical"
+    domain: ["male", "female"]
+    missing_allowed: false
+    description: "Biological sex"
+
+  - name: "hypertension_flag"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = existing hypertension diagnosis"
+
+  - name: "heart_disease_flag"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = existing heart disease diagnosis"
+
+  - name: "ever_married"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = has been married (synthetic demographic proxy)"
+
+  - name: "work_type"
+    type: "categorical"
+    domain: ["private", "self_employed", "government", "children", "never_worked"]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Employment type (synthetic demographic variable)"
+
+  - name: "residence_type"
+    type: "categorical"
+    domain: ["urban", "rural"]
+    missing_allowed: false
+    description: "Urban or rural residence"
+
+  - name: "avg_glucose_level"
+    type: "numerical"
+    unit: "mg/dL"
+    domain: [50, 280]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Average glucose level (synthetic proxy)"
+
+  - name: "bmi"
+    type: "numerical"
+    unit: "kg/m²"
+    domain: [15.0, 60.0]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Body Mass Index"
+
+  - name: "smoking_status"
+    type: "categorical"
+    domain: ["never", "formerly_smoked", "smokes", "unknown"]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Smoking history (synthetic)"
+
+  - name: "atrial_fibrillation_flag"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = existing atrial fibrillation diagnosis"
+
+  - name: "cholesterol_total"
+    type: "numerical"
+    unit: "mg/dL"
+    domain: [100, 600]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Total cholesterol (synthetic proxy)"
+
+  - name: "physical_activity"
+    type: "categorical"
+    domain: ["sedentary", "light", "moderate", "active"]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Self-reported physical activity level"
+
+# -----------------------------------------------
+# Feature Category Lists
+# -----------------------------------------------
+numerical_features:
+  - age
+  - avg_glucose_level
+  - bmi
+  - cholesterol_total
+
+categorical_features:
+  - sex
+  - work_type
+  - residence_type
+  - smoking_status
+  - physical_activity
+
+binary_features:
+  - hypertension_flag
+  - heart_disease_flag
+  - ever_married
+  - atrial_fibrillation_flag
+
+# -----------------------------------------------
+# Leakage Risks
+# -----------------------------------------------
+leakage_risks:
+  - field: "avg_glucose_level"
+    risk: "MEDIUM"
+    note: "Post-stroke glucose management values must not be used; only pre-event values acceptable."
+  - field: "heart_disease_flag"
+    risk: "LOW"
+    note: "Pre-existing heart disease is a valid risk factor, not a post-event label."
+
+# -----------------------------------------------
+# Prohibited Fields
+# -----------------------------------------------
+prohibited_fields:
+  - "stroke_severity_score"
+  - "post_stroke_rehabilitation"
+  - "discharge_destination"
+  - "mortality_outcome"
+  - "risk_level"
+  - "calibrated_probability"
+  - "prediction_result"
+
+# -----------------------------------------------
+# Dataset Generation Requirements (Phase 7B)
+# -----------------------------------------------
+generation:
+  method: "synthetic"
+  target_records: 5000
+  random_seed: 42
+  generator_version: "TBD"
+  validation_required: true
+  note: "DO NOT generate yet. Phase 7B only."
+
+# -----------------------------------------------
+# Preprocessing Requirements
+# -----------------------------------------------
+preprocessing:
+  numerical: "StandardScaler (fit on train only)"
+  categorical: "OrdinalEncoder (fit on train only)"
+  binary: "passthrough"
+  missing_numerical: "median imputation + missingness indicator"
+  missing_categorical: "most_frequent imputation + missingness indicator"
+  feature_order: "fixed — see features list above"

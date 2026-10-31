@@ -1,0 +1,243 @@
+# MediRisk 2.0 — Disease Dataset Specification: BREAST_CANCER
+# Schema Version: 1.0.0
+# Dataset Version: 1.0.0
+# Phase: 7A — Specification Only (no data generated yet)
+
+dataset_identifier: "breast_cancer"
+dataset_version: "1.0.0"
+schema_version: "1.0.0"
+status: "SPECIFICATION_ONLY"
+created: "2026-09-26"
+
+disclaimer: >
+  This is a SYNTHETIC RESEARCH dataset. It does NOT represent real patient data
+  and has NOT been clinically validated. No medical decisions should be based
+  on this specification or any model trained on it.
+  Cell nucleus measurements are prototype synthetic variables and do not
+  represent real biopsy data.
+
+# -----------------------------------------------
+# Target Definition
+# -----------------------------------------------
+target:
+  column: "breast_cancer_outcome"
+  type: "binary"
+  negative_class:
+    value: 0
+    meaning: "Benign / No malignancy"
+  positive_class:
+    value: 1
+    meaning: "Malignant breast cancer"
+  task: "binary_classification"
+
+# -----------------------------------------------
+# Class Balance
+# -----------------------------------------------
+class_balance:
+  intended_positive_proportion: 0.37
+  acceptable_range: [0.27, 0.47]
+  validation_rule: "assert 0.27 <= positive_rate <= 0.47"
+  balance_justification: "Synthetic screening cohort. Not epidemiologically sourced."
+
+# -----------------------------------------------
+# Features
+# -----------------------------------------------
+features:
+  - name: "age"
+    type: "numerical"
+    unit: "years"
+    domain: [20, 90]
+    missing_allowed: false
+    description: "Age of the individual"
+
+  - name: "radius_mean"
+    type: "numerical"
+    unit: "µm"
+    domain: [5.0, 30.0]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: >
+      PROTOTYPE SYNTHETIC VARIABLE: Mean radius of cell nuclei.
+
+  - name: "texture_mean"
+    type: "numerical"
+    unit: "score"
+    domain: [5.0, 45.0]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: >
+      PROTOTYPE SYNTHETIC VARIABLE: Mean standard deviation of
+      gray-scale pixel values in cell nuclei.
+
+  - name: "perimeter_mean"
+    type: "numerical"
+    unit: "µm"
+    domain: [40.0, 200.0]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "PROTOTYPE SYNTHETIC VARIABLE: Mean perimeter of cell nuclei."
+
+  - name: "area_mean"
+    type: "numerical"
+    unit: "µm²"
+    domain: [140.0, 2500.0]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "PROTOTYPE SYNTHETIC VARIABLE: Mean area of cell nuclei."
+
+  - name: "smoothness_mean"
+    type: "numerical"
+    unit: "score"
+    domain: [0.05, 0.20]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "PROTOTYPE SYNTHETIC VARIABLE: Mean smoothness of cell nuclei."
+
+  - name: "compactness_mean"
+    type: "numerical"
+    unit: "score"
+    domain: [0.0, 0.4]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "PROTOTYPE SYNTHETIC VARIABLE: Mean compactness."
+
+  - name: "concavity_mean"
+    type: "numerical"
+    unit: "score"
+    domain: [0.0, 0.5]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "PROTOTYPE SYNTHETIC VARIABLE: Mean concavity."
+
+  - name: "symmetry_mean"
+    type: "numerical"
+    unit: "score"
+    domain: [0.1, 0.4]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "PROTOTYPE SYNTHETIC VARIABLE: Mean symmetry of cell nuclei."
+
+  - name: "fractal_dimension_mean"
+    type: "numerical"
+    unit: "score"
+    domain: [0.05, 0.12]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "PROTOTYPE SYNTHETIC VARIABLE: Mean fractal dimension."
+
+  - name: "family_history_breast_cancer"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = first-degree female relative with breast cancer"
+
+  - name: "brca_mutation_known"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: true
+    max_missing_pct: 50
+    description: "1 = known BRCA1/BRCA2 mutation (high missingness expected)"
+
+  - name: "menopause_status"
+    type: "categorical"
+    domain: ["pre", "peri", "post"]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Menopause status (female only; 0 for males)"
+
+  - name: "hormone_therapy_history"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "1 = history of hormone replacement therapy"
+
+  - name: "bmi"
+    type: "numerical"
+    unit: "kg/m²"
+    domain: [15.0, 60.0]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Body Mass Index"
+
+  - name: "alcohol_consumption"
+    type: "categorical"
+    domain: ["none", "light", "moderate", "heavy"]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Self-reported alcohol consumption level (synthetic)"
+
+# -----------------------------------------------
+# Feature Category Lists
+# -----------------------------------------------
+numerical_features:
+  - age
+  - radius_mean
+  - texture_mean
+  - perimeter_mean
+  - area_mean
+  - smoothness_mean
+  - compactness_mean
+  - concavity_mean
+  - symmetry_mean
+  - fractal_dimension_mean
+  - bmi
+
+categorical_features:
+  - menopause_status
+  - alcohol_consumption
+
+binary_features:
+  - family_history_breast_cancer
+  - brca_mutation_known
+  - hormone_therapy_history
+
+# -----------------------------------------------
+# Leakage Risks
+# -----------------------------------------------
+leakage_risks:
+  - field: "radius_mean"
+    risk: "HIGH"
+    note: >
+      Cell nucleus measurements are derived from fine needle
+      aspirate biopsy — an investigative procedure. In this
+      prototype they are used as synthetic screening proxies.
+      Real biopsy results constitute post-diagnosis data if
+      biopsy is the diagnostic method itself.
+  - field: "brca_mutation_known"
+    risk: "LOW"
+    note: "Pre-existing genetic test result is a valid risk factor, not a diagnostic outcome."
+
+# -----------------------------------------------
+# Prohibited Fields
+# -----------------------------------------------
+prohibited_fields:
+  - "biopsy_pathology_report"
+  - "chemotherapy_regimen"
+  - "tumor_stage"
+  - "lymph_node_status"
+  - "risk_level"
+  - "calibrated_probability"
+  - "prediction_result"
+
+# -----------------------------------------------
+# Dataset Generation Requirements (Phase 7B)
+# -----------------------------------------------
+generation:
+  method: "synthetic"
+  target_records: 5000
+  random_seed: 42
+  generator_version: "TBD"
+  validation_required: true
+  note: "DO NOT generate yet. Phase 7B only."
+
+# -----------------------------------------------
+# Preprocessing Requirements
+# -----------------------------------------------
+preprocessing:
+  numerical: "StandardScaler (fit on train only)"
+  categorical: "OrdinalEncoder (fit on train only)"
+  binary: "passthrough"
+  missing_numerical: "median imputation + missingness indicator"
+  missing_categorical: "most_frequent imputation + missingness indicator"
+  feature_order: "fixed — see features list above"

@@ -1,0 +1,231 @@
+# MediRisk 2.0 — Disease Dataset Specification: HYPERTENSION
+# Schema Version: 1.0.0
+# Dataset Version: 1.0.0
+# Phase: 7A — Specification Only (no data generated yet)
+
+dataset_identifier: "hypertension"
+dataset_version: "1.0.0"
+schema_version: "1.0.0"
+status: "SPECIFICATION_ONLY"
+created: "2026-09-26"
+
+disclaimer: >
+  This is a SYNTHETIC RESEARCH dataset. It does NOT represent real patient data
+  and has NOT been clinically validated. No medical decisions should be based
+  on this specification or any model trained on it.
+
+# -----------------------------------------------
+# Target Definition
+# -----------------------------------------------
+target:
+  column: "hypertension_outcome"
+  type: "binary"
+  negative_class:
+    value: 0
+    meaning: "No hypertension (normotensive)"
+  positive_class:
+    value: 1
+    meaning: "Hypertension present (systolic ≥ 140 or diastolic ≥ 90 mmHg, synthetic threshold)"
+  task: "binary_classification"
+  note: >
+    The target represents a binary hypertension classification.
+    The actual blood pressure reading is NOT included as a direct feature
+    to avoid obvious leakage. Proxy features are used instead.
+
+# -----------------------------------------------
+# Class Balance
+# -----------------------------------------------
+class_balance:
+  intended_positive_proportion: 0.40
+  acceptable_range: [0.30, 0.50]
+  validation_rule: "assert 0.30 <= positive_rate <= 0.50"
+  balance_justification: "Synthetic screening-enriched cohort. Not epidemiologically sourced."
+
+# -----------------------------------------------
+# Features
+# -----------------------------------------------
+features:
+  - name: "age"
+    type: "numerical"
+    unit: "years"
+    domain: [18, 90]
+    missing_allowed: false
+    description: "Age of the individual"
+
+  - name: "sex"
+    type: "categorical"
+    domain: ["male", "female"]
+    missing_allowed: false
+    description: "Biological sex"
+
+  - name: "bmi"
+    type: "numerical"
+    unit: "kg/m²"
+    domain: [15.0, 60.0]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Body Mass Index"
+
+  - name: "sodium_intake"
+    type: "categorical"
+    domain: ["low", "moderate", "high", "very_high"]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Estimated dietary sodium intake level (self-reported synthetic)"
+
+  - name: "physical_activity"
+    type: "categorical"
+    domain: ["sedentary", "light", "moderate", "active"]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Self-reported physical activity level"
+
+  - name: "smoking_status"
+    type: "categorical"
+    domain: ["never", "former", "current"]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Smoking history"
+
+  - name: "alcohol_consumption"
+    type: "categorical"
+    domain: ["none", "light", "moderate", "heavy"]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Self-reported alcohol consumption (synthetic)"
+
+  - name: "family_history_hypertension"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = first-degree relative with hypertension"
+
+  - name: "diabetes_flag"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = existing diabetes diagnosis"
+
+  - name: "ckd_flag"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = existing chronic kidney disease diagnosis"
+
+  - name: "stress_level"
+    type: "categorical"
+    domain: ["low", "moderate", "high", "very_high"]
+    missing_allowed: true
+    max_missing_pct: 20
+    description: "Self-reported stress level (synthetic)"
+
+  - name: "sleep_hours_per_night"
+    type: "numerical"
+    unit: "hours"
+    domain: [2.0, 12.0]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Average hours of sleep per night (self-reported synthetic)"
+
+  - name: "cholesterol_total"
+    type: "numerical"
+    unit: "mg/dL"
+    domain: [100, 600]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Total cholesterol (synthetic proxy)"
+
+  - name: "heart_rate_resting"
+    type: "numerical"
+    unit: "bpm"
+    domain: [40, 120]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Resting heart rate"
+
+  - name: "waist_circumference"
+    type: "numerical"
+    unit: "cm"
+    domain: [50, 160]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Waist circumference (synthetic)"
+
+# -----------------------------------------------
+# Feature Category Lists
+# -----------------------------------------------
+numerical_features:
+  - age
+  - bmi
+  - sleep_hours_per_night
+  - cholesterol_total
+  - heart_rate_resting
+  - waist_circumference
+
+categorical_features:
+  - sex
+  - sodium_intake
+  - physical_activity
+  - smoking_status
+  - alcohol_consumption
+  - stress_level
+
+binary_features:
+  - family_history_hypertension
+  - diabetes_flag
+  - ckd_flag
+
+# -----------------------------------------------
+# Leakage Risks
+# -----------------------------------------------
+leakage_risks:
+  - field: "heart_rate_resting"
+    risk: "MEDIUM"
+    note: >
+      Resting heart rate is correlated with blood pressure but
+      is not a direct diagnostic marker. Post-treatment heart
+      rate values must be excluded.
+  - field: "cholesterol_total"
+    risk: "LOW"
+    note: "Cholesterol is a co-risk factor, not a direct hypertension marker."
+  - field: "blood_pressure_systolic"
+    risk: "CRITICAL — EXCLUDED"
+    note: >
+      Raw blood pressure readings are the target criterion itself.
+      They must NOT appear as features. The target is derived from
+      blood pressure, so including it as a feature is direct leakage.
+
+# -----------------------------------------------
+# Prohibited Fields
+# -----------------------------------------------
+prohibited_fields:
+  - "blood_pressure_systolic"
+  - "blood_pressure_diastolic"
+  - "antihypertensive_medication"
+  - "prescribed_diuretic"
+  - "blood_pressure_post_treatment"
+  - "risk_level"
+  - "calibrated_probability"
+  - "prediction_result"
+
+# -----------------------------------------------
+# Dataset Generation Requirements (Phase 7B)
+# -----------------------------------------------
+generation:
+  method: "synthetic"
+  target_records: 5000
+  random_seed: 42
+  generator_version: "TBD"
+  validation_required: true
+  note: "DO NOT generate yet. Phase 7B only."
+
+# -----------------------------------------------
+# Preprocessing Requirements
+# -----------------------------------------------
+preprocessing:
+  numerical: "StandardScaler (fit on train only)"
+  categorical: "OrdinalEncoder (fit on train only)"
+  binary: "passthrough"
+  missing_numerical: "median imputation + missingness indicator"
+  missing_categorical: "most_frequent imputation + missingness indicator"
+  feature_order: "fixed — see features list above"

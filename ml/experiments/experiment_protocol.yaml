@@ -1,0 +1,247 @@
+# MediRisk 2.0 — Experiment Protocol
+# ------------------------------------
+# This file defines the official, machine-readable experiment
+# protocol for Phase 7B model comparison.
+#
+# DO NOT modify this file without bumping experiment_version.
+# All experiments must reference and conform to this protocol.
+#
+# Phase 7A: Status = PROTOCOL_ONLY (no experiments executed yet)
+
+experiment_version: "1.0.0"
+schema_version: "1.0.0"
+protocol_status: "PROTOCOL_ONLY"
+created: "2026-09-26"
+note: >
+  No experiments have been executed. This is a specification-only
+  document created in Phase 7A. Phase 7B will execute experiments
+  against this protocol.
+
+# -----------------------------------------------
+# Models Under Evaluation
+# -----------------------------------------------
+models:
+  - name: "TabPFN"
+    library: "tabpfn"
+    version: "9.0.0"
+    pip_package: "tabpfn==9.0.0"
+    type: "tabular_foundation_model"
+    role: "candidate"
+    status: "NOT_TRAINED"
+    note: >
+      TabPFN is a prior-data fitted network (transformer) for tabular
+      classification. It is an experimental candidate — do NOT
+      declare it winner before measured results.
+    experiment_requirements:
+      - deterministic_config_where_supported: true
+      - record_inference_latency: true
+      - record_ram_usage: true
+      - record_vram_usage: true
+      - record_model_version: true
+      - record_environment_versions: true
+
+  - name: "TabICLv2"
+    library: "tabicl"
+    version: "2.2.0"
+    pip_package: "tabicl==2.2.0"
+    type: "tabular_foundation_model"
+    role: "candidate"
+    status: "NOT_TRAINED"
+    note: >
+      TabICLv2 is an in-context learning model for tabular data.
+      It is an experimental candidate — do NOT declare it winner
+      before measured results.
+    experiment_requirements:
+      - deterministic_config_where_supported: true
+      - record_inference_latency: true
+      - record_ram_usage: true
+      - record_vram_usage: true
+      - record_model_version: true
+      - record_environment_versions: true
+
+# -----------------------------------------------
+# PROHIBITED Primary Models
+# -----------------------------------------------
+prohibited_primary_models:
+  models:
+    - "XGBoost"
+    - "LightGBM"
+    - "RandomForest"
+    - "GradientBoosting"
+  note: >
+    These models must NOT be used as primary disease prediction models.
+    They may only be used as baseline reference comparisons if explicitly
+    documented and justified in a future phase.
+
+# -----------------------------------------------
+# Dataset Configuration
+# -----------------------------------------------
+dataset_versions:
+  DIABETES: "1.0.0"
+  HEART_DISEASE: "1.0.0"
+  STROKE: "1.0.0"
+  ASTHMA: "1.0.0"
+  CHRONIC_KIDNEY_DISEASE: "1.0.0"
+  LIVER_DISEASE: "1.0.0"
+  PARKINSONS: "1.0.0"
+  BREAST_CANCER: "1.0.0"
+  LUNG_CANCER: "1.0.0"
+  HYPERTENSION: "1.0.0"
+
+# -----------------------------------------------
+# Data Split Configuration
+# -----------------------------------------------
+data_split:
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+  stratified: true
+  random_seed: 42
+  test_set_policy: >
+    The test set MUST remain untouched until final evaluation.
+    No hyperparameter tuning or model selection decisions may
+    use test set data.
+
+# -----------------------------------------------
+# Dependency Versions (Frozen)
+# -----------------------------------------------
+dependency_versions:
+  tabpfn: "9.0.0"
+  tabicl: "2.2.0"
+  torch: "2.14.0"
+  scikit_learn: "1.5.2"
+  numpy: "1.26.4"
+  pandas: "2.2.2"
+  shap: "0.46.0"
+  note: >
+    These versions are FROZEN. Do NOT silently change any version.
+    If a compatibility problem is discovered, STOP and document it
+    before substituting another version.
+
+# -----------------------------------------------
+# Evaluation Metrics
+# -----------------------------------------------
+metrics:
+  classification:
+    - name: "roc_auc"
+      description: "Area Under the ROC Curve"
+      primary: true
+    - name: "pr_auc"
+      description: "Area Under the Precision-Recall Curve"
+      primary: true
+    - name: "accuracy"
+      description: "Classification accuracy"
+    - name: "precision"
+      description: "Positive predictive value"
+    - name: "recall"
+      description: "Sensitivity / true positive rate"
+    - name: "sensitivity"
+      description: "Same as recall — true positive rate"
+    - name: "specificity"
+      description: "True negative rate"
+    - name: "f1_score"
+      description: "Harmonic mean of precision and recall"
+
+  calibration:
+    - name: "brier_score"
+      description: "Mean squared error of predicted probabilities vs outcomes"
+    - name: "expected_calibration_error"
+      abbreviation: "ECE"
+      description: "Weighted average absolute difference between confidence and accuracy"
+
+  system_performance:
+    - name: "inference_latency_ms"
+      description: "End-to-end prediction latency in milliseconds"
+      unit: "ms"
+    - name: "ram_consumption_mb"
+      description: "Peak RAM usage during inference"
+      unit: "MB"
+    - name: "vram_consumption_mb"
+      description: "Peak VRAM usage during inference (if GPU available)"
+      unit: "MB"
+
+  note: >
+    Do NOT create a weighted composite score in Phase 7B.
+    Do NOT rank models until all metrics are collected.
+    Do NOT declare a winner before all experiments complete.
+    Model selection must be evidence-based.
+
+# -----------------------------------------------
+# Calibration Protocol
+# -----------------------------------------------
+calibration:
+  method: "IsotonicRegression"
+  fit_on: "validation_set_only"
+  status: "NOT_IMPLEMENTED"
+  future_phase: "Phase 7B / Phase 8"
+  outputs:
+    - raw_probability
+    - calibrated_probability
+  test_set_policy: "untouched_until_final_evaluation"
+
+# -----------------------------------------------
+# Reproducibility Fields
+# -----------------------------------------------
+reproducibility:
+  required_fields:
+    - dataset_version
+    - schema_version
+    - random_seed
+    - model_name
+    - model_version
+    - python_version
+    - dependency_versions
+    - preprocessing_version
+    - experiment_timestamp
+  default_seed: 42
+
+# -----------------------------------------------
+# Resource Metrics Collection
+# -----------------------------------------------
+resource_metrics:
+  collect_inference_latency: true
+  collect_ram: true
+  collect_vram: true
+  latency_unit: "milliseconds"
+  memory_unit: "MB"
+  note: "Resource metrics must be collected per disease per model."
+
+# -----------------------------------------------
+# Comparison Protocol
+# -----------------------------------------------
+comparison_protocol:
+  evaluate_all_diseases: true
+  evaluate_both_models: true
+  same_split_for_all_models: true
+  same_preprocessing_for_all_models: true
+  note: >
+    Both TabPFN 9.0.0 and TabICLv2 2.2.0 must be evaluated on
+    identical train/validation/test splits with identical
+    preprocessing for a fair comparison.
+
+# -----------------------------------------------
+# Explainability Protocol
+# -----------------------------------------------
+explainability:
+  library: "shap"
+  version: "0.46.0"
+  status: "NOT_IMPLEMENTED"
+  future_phase: "Phase 8"
+  storage_target: "prediction_attributions"
+  causal_disclaimer: >
+    SHAP values indicate feature contribution to model output.
+    They must NOT be interpreted as causal medical relationships.
+
+# -----------------------------------------------
+# Risk Engine (Future)
+# -----------------------------------------------
+risk_engine:
+  status: "NOT_IMPLEMENTED"
+  future_phase: "Phase 8"
+  input: "calibrated_probability"
+  output_classes: ["LOW", "MODERATE", "HIGH"]
+  prototype_thresholds:
+    low: "< 0.30"
+    moderate: "0.30 – 0.70"
+    high: "> 0.70"
+  clinical_validation: false

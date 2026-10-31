@@ -1,0 +1,19 @@
+{
+  "disease_id": "parkinsons",
+  "dataset_version": "1.0.0",
+  "schema_version": "1.0.0",
+  "random_seed": 42,
+  "target_column": "parkinsons_outcome",
+  "train_records": 3500,
+  "val_records": 750,
+  "test_records": 750,
+  "train_positive_rate": 0.344,
+  "val_positive_rate": 0.344,
+  "test_positive_rate": 0.344,
+  "split_ratios": {
+    "train": 0.7,
+    "val": 0.15,
+    "test": 0.15
+  },
+  "stratified": true
+}

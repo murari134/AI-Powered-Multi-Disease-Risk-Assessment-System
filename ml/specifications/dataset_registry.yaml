@@ -1,0 +1,146 @@
+# MediRisk 2.0 — Dataset Registry
+# --------------------------------
+# Registers all 10 disease datasets for the ML layer.
+# Phase 7A: Status = SPECIFICATION_ONLY
+# Phase 7B: Status will be updated to GENERATED after synthetic data creation.
+#
+# This file is the authoritative source of truth for dataset existence.
+# Any experiment must reference a dataset_code present in this registry.
+
+registry_version: "1.0.0"
+schema_version: "1.0.0"
+created: "2026-09-26"
+total_diseases: 10
+total_record_target: 50000
+
+datasets:
+
+  - disease_code: "DIABETES"
+    dataset_identifier: "diabetes"
+    dataset_version: "1.0.0"
+    schema_version: "1.0.0"
+    specification_file: "ml/specifications/diabetes.yaml"
+    target_column: "diabetes_outcome"
+    target_type: "binary"
+    record_target: 5000
+    positive_proportion_target: 0.35
+    status: "SPECIFICATION_ONLY"
+    generated: false
+    generation_phase: "Phase 7B"
+
+  - disease_code: "HEART_DISEASE"
+    dataset_identifier: "heart_disease"
+    dataset_version: "1.0.0"
+    schema_version: "1.0.0"
+    specification_file: "ml/specifications/heart_disease.yaml"
+    target_column: "heart_disease_outcome"
+    target_type: "binary"
+    record_target: 5000
+    positive_proportion_target: 0.40
+    status: "SPECIFICATION_ONLY"
+    generated: false
+    generation_phase: "Phase 7B"
+
+  - disease_code: "STROKE"
+    dataset_identifier: "stroke"
+    dataset_version: "1.0.0"
+    schema_version: "1.0.0"
+    specification_file: "ml/specifications/stroke.yaml"
+    target_column: "stroke_outcome"
+    target_type: "binary"
+    record_target: 5000
+    positive_proportion_target: 0.25
+    status: "SPECIFICATION_ONLY"
+    generated: false
+    generation_phase: "Phase 7B"
+
+  - disease_code: "ASTHMA"
+    dataset_identifier: "asthma"
+    dataset_version: "1.0.0"
+    schema_version: "1.0.0"
+    specification_file: "ml/specifications/asthma.yaml"
+    target_column: "asthma_outcome"
+    target_type: "binary"
+    record_target: 5000
+    positive_proportion_target: 0.30
+    status: "SPECIFICATION_ONLY"
+    generated: false
+    generation_phase: "Phase 7B"
+
+  - disease_code: "CHRONIC_KIDNEY_DISEASE"
+    dataset_identifier: "chronic_kidney_disease"
+    dataset_version: "1.0.0"
+    schema_version: "1.0.0"
+    specification_file: "ml/specifications/chronic_kidney_disease.yaml"
+    target_column: "ckd_outcome"
+    target_type: "binary"
+    record_target: 5000
+    positive_proportion_target: 0.35
+    status: "SPECIFICATION_ONLY"
+    generated: false
+    generation_phase: "Phase 7B"
+
+  - disease_code: "LIVER_DISEASE"
+    dataset_identifier: "liver_disease"
+    dataset_version: "1.0.0"
+    schema_version: "1.0.0"
+    specification_file: "ml/specifications/liver_disease.yaml"
+    target_column: "liver_disease_outcome"
+    target_type: "binary"
+    record_target: 5000
+    positive_proportion_target: 0.38
+    status: "SPECIFICATION_ONLY"
+    generated: false
+    generation_phase: "Phase 7B"
+
+  - disease_code: "PARKINSONS"
+    dataset_identifier: "parkinsons"
+    dataset_version: "1.0.0"
+    schema_version: "1.0.0"
+    specification_file: "ml/specifications/parkinsons.yaml"
+    target_column: "parkinsons_outcome"
+    target_type: "binary"
+    record_target: 5000
+    positive_proportion_target: 0.35
+    status: "SPECIFICATION_ONLY"
+    generated: false
+    generation_phase: "Phase 7B"
+
+  - disease_code: "BREAST_CANCER"
+    dataset_identifier: "breast_cancer"
+    dataset_version: "1.0.0"
+    schema_version: "1.0.0"
+    specification_file: "ml/specifications/breast_cancer.yaml"
+    target_column: "breast_cancer_outcome"
+    target_type: "binary"
+    record_target: 5000
+    positive_proportion_target: 0.37
+    status: "SPECIFICATION_ONLY"
+    generated: false
+    generation_phase: "Phase 7B"
+
+  - disease_code: "LUNG_CANCER"
+    dataset_identifier: "lung_cancer"
+    dataset_version: "1.0.0"
+    schema_version: "1.0.0"
+    specification_file: "ml/specifications/lung_cancer.yaml"
+    target_column: "lung_cancer_outcome"
+    target_type: "binary"
+    record_target: 5000
+    positive_proportion_target: 0.35
+    status: "SPECIFICATION_ONLY"
+    generated: false
+    generation_phase: "Phase 7B"
+
+  - disease_code: "HYPERTENSION"
+    dataset_identifier: "hypertension"
+    dataset_version: "1.0.0"
+    schema_version: "1.0.0"
+    specification_file: "ml/specifications/hypertension.yaml"
+    target_column: "hypertension_outcome"
+    target_type: "binary"
+    record_target: 5000
+    positive_proportion_target: 0.40
+    status: "SPECIFICATION_ONLY"
+    generated: false
+    generation_phase: "Phase 7B"

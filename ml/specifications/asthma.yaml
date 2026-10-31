@@ -1,0 +1,211 @@
+# MediRisk 2.0 — Disease Dataset Specification: ASTHMA
+# Schema Version: 1.0.0
+# Dataset Version: 1.0.0
+# Phase: 7A — Specification Only (no data generated yet)
+
+dataset_identifier: "asthma"
+dataset_version: "1.0.0"
+schema_version: "1.0.0"
+status: "SPECIFICATION_ONLY"
+created: "2026-09-26"
+
+disclaimer: >
+  This is a SYNTHETIC RESEARCH dataset. It does NOT represent real patient data
+  and has NOT been clinically validated. No medical decisions should be based
+  on this specification or any model trained on it.
+
+# -----------------------------------------------
+# Target Definition
+# -----------------------------------------------
+target:
+  column: "asthma_outcome"
+  type: "binary"
+  negative_class:
+    value: 0
+    meaning: "No asthma diagnosis"
+  positive_class:
+    value: 1
+    meaning: "Asthma diagnosis present"
+  task: "binary_classification"
+
+# -----------------------------------------------
+# Class Balance
+# -----------------------------------------------
+class_balance:
+  intended_positive_proportion: 0.30
+  acceptable_range: [0.20, 0.40]
+  validation_rule: "assert 0.20 <= positive_rate <= 0.40"
+  balance_justification: "Synthetic screening-cohort rate. Not epidemiologically sourced."
+
+# -----------------------------------------------
+# Features
+# -----------------------------------------------
+features:
+  - name: "age"
+    type: "numerical"
+    unit: "years"
+    domain: [5, 90]
+    missing_allowed: false
+    description: "Age of the individual (childhood asthma included)"
+
+  - name: "sex"
+    type: "categorical"
+    domain: ["male", "female"]
+    missing_allowed: false
+    description: "Biological sex"
+
+  - name: "family_history_asthma"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = first-degree relative with asthma"
+
+  - name: "allergic_rhinitis_flag"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = existing allergic rhinitis diagnosis"
+
+  - name: "eczema_flag"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = existing eczema (atopic dermatitis) diagnosis"
+
+  - name: "smoking_status"
+    type: "categorical"
+    domain: ["never", "former", "current", "passive"]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Smoking status including passive exposure"
+
+  - name: "occupational_exposure"
+    type: "categorical"
+    domain: ["none", "low", "moderate", "high"]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Occupational dust/chemical exposure level (synthetic)"
+
+  - name: "air_quality_index"
+    type: "numerical"
+    unit: "AQI"
+    domain: [0, 500]
+    missing_allowed: true
+    max_missing_pct: 20
+    description: "Estimated local air quality index (synthetic proxy)"
+
+  - name: "bmi"
+    type: "numerical"
+    unit: "kg/m²"
+    domain: [12.0, 60.0]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Body Mass Index"
+
+  - name: "exercise_frequency"
+    type: "categorical"
+    domain: ["never", "rarely", "sometimes", "regularly"]
+    missing_allowed: true
+    max_missing_pct: 10
+    description: "Physical exercise frequency (self-reported synthetic)"
+
+  - name: "pet_exposure"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = regular exposure to pets (synthetic allergen proxy)"
+
+  - name: "mold_exposure"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = known mold exposure in home (synthetic)"
+
+  - name: "fev1_fvc_ratio"
+    type: "numerical"
+    unit: "ratio"
+    domain: [0.3, 1.0]
+    missing_allowed: true
+    max_missing_pct: 20
+    description: >
+      FEV1/FVC spirometry ratio (synthetic proxy — high leakage risk if
+      derived post-diagnosis; only pre-diagnosis spirometry acceptable)
+
+  - name: "num_respiratory_infections_past_year"
+    type: "numerical"
+    unit: "count"
+    domain: [0, 10]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Number of respiratory infections in past 12 months (self-reported synthetic)"
+
+# -----------------------------------------------
+# Feature Category Lists
+# -----------------------------------------------
+numerical_features:
+  - age
+  - air_quality_index
+  - bmi
+  - fev1_fvc_ratio
+  - num_respiratory_infections_past_year
+
+categorical_features:
+  - sex
+  - smoking_status
+  - occupational_exposure
+  - exercise_frequency
+
+binary_features:
+  - family_history_asthma
+  - allergic_rhinitis_flag
+  - eczema_flag
+  - pet_exposure
+  - mold_exposure
+
+# -----------------------------------------------
+# Leakage Risks
+# -----------------------------------------------
+leakage_risks:
+  - field: "fev1_fvc_ratio"
+    risk: "HIGH"
+    note: >
+      Spirometry is the gold standard for asthma diagnosis.
+      Post-diagnosis spirometry values constitute direct leakage.
+      Only pre-diagnosis or screening values are acceptable.
+  - field: "allergic_rhinitis_flag"
+    risk: "LOW"
+    note: "Pre-existing allergic rhinitis is a valid comorbidity, not a target-derived field."
+
+# -----------------------------------------------
+# Prohibited Fields
+# -----------------------------------------------
+prohibited_fields:
+  - "prescribed_inhaler_type"
+  - "steroid_dose"
+  - "asthma_action_plan"
+  - "post_diagnosis_fev1"
+  - "risk_level"
+  - "calibrated_probability"
+  - "prediction_result"
+
+# -----------------------------------------------
+# Dataset Generation Requirements (Phase 7B)
+# -----------------------------------------------
+generation:
+  method: "synthetic"
+  target_records: 5000
+  random_seed: 42
+  generator_version: "TBD"
+  validation_required: true
+  note: "DO NOT generate yet. Phase 7B only."
+
+# -----------------------------------------------
+# Preprocessing Requirements
+# -----------------------------------------------
+preprocessing:
+  numerical: "StandardScaler (fit on train only)"
+  categorical: "OrdinalEncoder (fit on train only)"
+  binary: "passthrough"
+  missing_numerical: "median imputation + missingness indicator"
+  missing_categorical: "most_frequent imputation + missingness indicator"
+  feature_order: "fixed — see features list above"

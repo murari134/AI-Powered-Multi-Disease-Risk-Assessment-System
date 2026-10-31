@@ -1,0 +1,20 @@
+# MediRisk 2.0 — ML Layer Requirements
+# Phase 7B — Frozen versions. DO NOT silently change.
+# If a compatibility problem is discovered, STOP and document it.
+
+# ---- Core ML ----
+tabpfn==9.0.0
+tabicl==2.2.0
+torch==2.14.0
+scikit-learn==1.5.2
+numpy==1.26.4
+pandas==2.2.2
+shap==0.46.0
+
+# ---- Utilities ----
+PyYAML>=6.0,<7.0
+psutil>=5.9.0
+
+# ---- Testing ----
+pytest>=8.0.0
+pytest-asyncio>=0.23.0

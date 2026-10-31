@@ -1,0 +1,33 @@
+{
+  "disease_code": "ASTHMA",
+  "dataset_identifier": "asthma",
+  "dataset_version": "1.0.0",
+  "schema_version": "1.0.0",
+  "record_count": 5000,
+  "feature_count": 14,
+  "target_column": "asthma_outcome",
+  "random_seed": 42,
+  "generator_version": "1.0.0",
+  "generation_timestamp": "2026-09-26T05:23:51.366165+00:00",
+  "synthetic": true,
+  "clinical_validation": false,
+  "disclaimer": "SYNTHETIC RESEARCH DATA ONLY. Does not represent real patients. Not clinically validated. Must not be used for clinical decisions.",
+  "positive_rate": 0.2818,
+  "columns": [
+    "age",
+    "sex",
+    "family_history_asthma",
+    "allergic_rhinitis_flag",
+    "eczema_flag",
+    "smoking_status",
+    "occupational_exposure",
+    "air_quality_index",
+    "bmi",
+    "exercise_frequency",
+    "pet_exposure",
+    "mold_exposure",
+    "fev1_fvc_ratio",
+    "num_respiratory_infections_past_year",
+    "asthma_outcome"
+  ]
+}

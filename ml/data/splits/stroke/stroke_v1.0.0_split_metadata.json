@@ -1,0 +1,19 @@
+{
+  "disease_id": "stroke",
+  "dataset_version": "1.0.0",
+  "schema_version": "1.0.0",
+  "random_seed": 42,
+  "target_column": "stroke_outcome",
+  "train_records": 3500,
+  "val_records": 750,
+  "test_records": 750,
+  "train_positive_rate": 0.22228571428571428,
+  "val_positive_rate": 0.22266666666666668,
+  "test_positive_rate": 0.22133333333333333,
+  "split_ratios": {
+    "train": 0.7,
+    "val": 0.15,
+    "test": 0.15
+  },
+  "stratified": true
+}

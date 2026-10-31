@@ -1,0 +1,35 @@
+# MediRisk 2.0 — Backend Python Dependencies
+# Phase 4: Backend Core (complete)
+# Python 3.12.4
+
+# Web framework
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+
+# Data validation
+pydantic==2.13.5
+pydantic-settings==2.5.2
+pydantic[email]
+
+# Database
+sqlalchemy==2.0.35
+asyncpg==0.29.0
+alembic==1.13.3
+
+# Security
+pwdlib[argon2]==0.2.0
+PyJWT[crypto]==2.9.0
+
+# Rate limiting
+slowapi==0.1.9
+
+# Caching / session infra
+redis==5.0.8
+
+# Testing
+pytest==8.3.3
+pytest-asyncio
+httpx==0.27.2
+
+# HTTP client (optional, for health checks)
+httpx==0.27.2

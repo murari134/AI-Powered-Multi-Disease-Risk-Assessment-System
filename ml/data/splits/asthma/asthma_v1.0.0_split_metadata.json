@@ -1,0 +1,19 @@
+{
+  "disease_id": "asthma",
+  "dataset_version": "1.0.0",
+  "schema_version": "1.0.0",
+  "random_seed": 42,
+  "target_column": "asthma_outcome",
+  "train_records": 3500,
+  "val_records": 750,
+  "test_records": 750,
+  "train_positive_rate": 0.2817142857142857,
+  "val_positive_rate": 0.2813333333333333,
+  "test_positive_rate": 0.2826666666666667,
+  "split_ratios": {
+    "train": 0.7,
+    "val": 0.15,
+    "test": 0.15
+  },
+  "stratified": true
+}

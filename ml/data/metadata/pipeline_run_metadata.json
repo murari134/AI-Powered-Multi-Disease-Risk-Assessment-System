@@ -1,0 +1,44 @@
+{
+  "phase": "7B",
+  "pipeline_version": "1.0.0",
+  "resume_script": "ml/phase7b_resume.py",
+  "run_start": "2026-09-26T17:23:39.224964+00:00",
+  "run_end": "2026-09-26T17:57:00.802597+00:00",
+  "total_runtime_s": 2001.577633,
+  "random_seed": 42,
+  "records_per_disease": 5000,
+  "diseases": [
+    "diabetes",
+    "heart_disease",
+    "stroke",
+    "asthma",
+    "chronic_kidney_disease",
+    "liver_disease",
+    "parkinsons",
+    "breast_cancer",
+    "lung_cancer",
+    "hypertension"
+  ],
+  "models_attempted": [
+    "TabPFN 9.0.0",
+    "TabICLv2 2.2.0"
+  ],
+  "tabicl_success": 10,
+  "tabicl_failed": 0,
+  "tabpfn_success": 10,
+  "tabpfn_failed": 0,
+  "tabpfn_token_found": true,
+  "tabpfn_disease_results": {
+    "diabetes": "SUCCESS",
+    "heart_disease": "SUCCESS",
+    "stroke": "SUCCESS",
+    "asthma": "SUCCESS",
+    "chronic_kidney_disease": "SUCCESS",
+    "liver_disease": "SUCCESS",
+    "parkinsons": "SUCCESS",
+    "breast_cancer": "SUCCESS",
+    "lung_cancer": "SUCCESS",
+    "hypertension": "SUCCESS"
+  },
+  "disclaimer": "SYNTHETIC RESEARCH DATA ONLY. Results do not represent clinical performance. Not clinically validated."
+}

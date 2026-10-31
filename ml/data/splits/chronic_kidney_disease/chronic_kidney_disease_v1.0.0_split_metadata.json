@@ -1,0 +1,19 @@
+{
+  "disease_id": "chronic_kidney_disease",
+  "dataset_version": "1.0.0",
+  "schema_version": "1.0.0",
+  "random_seed": 42,
+  "target_column": "ckd_outcome",
+  "train_records": 3500,
+  "val_records": 750,
+  "test_records": 750,
+  "train_positive_rate": 0.29085714285714287,
+  "val_positive_rate": 0.292,
+  "test_positive_rate": 0.2906666666666667,
+  "split_ratios": {
+    "train": 0.7,
+    "val": 0.15,
+    "test": 0.15
+  },
+  "stratified": true
+}

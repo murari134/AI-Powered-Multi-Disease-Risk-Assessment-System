@@ -1,0 +1,732 @@
+{
+  "diabetes": {
+    "disease_code": "DIABETES",
+    "dataset_identifier": "diabetes",
+    "valid": true,
+    "record_count": 5000,
+    "errors": [],
+    "warnings": [],
+    "checks": {
+      "record_count": {
+        "passed": true,
+        "actual": 5000,
+        "expected_range": [
+          4500,
+          5500
+        ]
+      },
+      "columns": {
+        "missing": [],
+        "unexpected": [],
+        "passed": true
+      },
+      "snake_case": {
+        "passed": true,
+        "violations": []
+      },
+      "target_values": {
+        "passed": true,
+        "found": [
+          0,
+          1
+        ]
+      },
+      "no_target_leakage": {
+        "passed": true
+      },
+      "infinite_values": {
+        "passed": true,
+        "count": 0
+      },
+      "missing_values": {
+        "passed": true,
+        "violations": []
+      },
+      "numerical_domains": {
+        "passed": true,
+        "violations": []
+      },
+      "categorical_domains": {
+        "passed": true,
+        "violations": []
+      },
+      "binary_constraints": {
+        "passed": true,
+        "violations": []
+      },
+      "class_distribution": {
+        "passed": true,
+        "positive_rate": 0.3158,
+        "acceptable_range": [
+          0.25,
+          0.45
+        ]
+      },
+      "duplicate_rows": {
+        "passed": true,
+        "count": 0
+      },
+      "schema_version": {
+        "passed": true,
+        "value": "1.0.0"
+      }
+    }
+  },
+  "heart_disease": {
+    "disease_code": "HEART_DISEASE",
+    "dataset_identifier": "heart_disease",
+    "valid": true,
+    "record_count": 5000,
+    "errors": [],
+    "warnings": [],
+    "checks": {
+      "record_count": {
+        "passed": true,
+        "actual": 5000,
+        "expected_range": [
+          4500,
+          5500
+        ]
+      },
+      "columns": {
+        "missing": [],
+        "unexpected": [],
+        "passed": true
+      },
+      "snake_case": {
+        "passed": true,
+        "violations": []
+      },
+      "target_values": {
+        "passed": true,
+        "found": [
+          0,
+          1
+        ]
+      },
+      "no_target_leakage": {
+        "passed": true
+      },
+      "infinite_values": {
+        "passed": true,
+        "count": 0
+      },
+      "missing_values": {
+        "passed": true,
+        "violations": []
+      },
+      "numerical_domains": {
+        "passed": true,
+        "violations": []
+      },
+      "categorical_domains": {
+        "passed": true,
+        "violations": []
+      },
+      "binary_constraints": {
+        "passed": true,
+        "violations": []
+      },
+      "class_distribution": {
+        "passed": true,
+        "positive_rate": 0.3556,
+        "acceptable_range": [
+          0.3,
+          0.5
+        ]
+      },
+      "duplicate_rows": {
+        "passed": true,
+        "count": 0
+      },
+      "schema_version": {
+        "passed": true,
+        "value": "1.0.0"
+      }
+    }
+  },
+  "stroke": {
+    "disease_code": "STROKE",
+    "dataset_identifier": "stroke",
+    "valid": true,
+    "record_count": 5000,
+    "errors": [],
+    "warnings": [],
+    "checks": {
+      "record_count": {
+        "passed": true,
+        "actual": 5000,
+        "expected_range": [
+          4500,
+          5500
+        ]
+      },
+      "columns": {
+        "missing": [],
+        "unexpected": [],
+        "passed": true
+      },
+      "snake_case": {
+        "passed": true,
+        "violations": []
+      },
+      "target_values": {
+        "passed": true,
+        "found": [
+          0,
+          1
+        ]
+      },
+      "no_target_leakage": {
+        "passed": true
+      },
+      "infinite_values": {
+        "passed": true,
+        "count": 0
+      },
+      "missing_values": {
+        "passed": true,
+        "violations": []
+      },
+      "numerical_domains": {
+        "passed": true,
+        "violations": []
+      },
+      "categorical_domains": {
+        "passed": true,
+        "violations": []
+      },
+      "binary_constraints": {
+        "passed": true,
+        "violations": []
+      },
+      "class_distribution": {
+        "passed": true,
+        "positive_rate": 0.2222,
+        "acceptable_range": [
+          0.15,
+          0.35
+        ]
+      },
+      "duplicate_rows": {
+        "passed": true,
+        "count": 0
+      },
+      "schema_version": {
+        "passed": true,
+        "value": "1.0.0"
+      }
+    }
+  },
+  "asthma": {
+    "disease_code": "ASTHMA",
+    "dataset_identifier": "asthma",
+    "valid": true,
+    "record_count": 5000,
+    "errors": [],
+    "warnings": [],
+    "checks": {
+      "record_count": {
+        "passed": true,
+        "actual": 5000,
+        "expected_range": [
+          4500,
+          5500
+        ]
+      },
+      "columns": {
+        "missing": [],
+        "unexpected": [],
+        "passed": true
+      },
+      "snake_case": {
+        "passed": true,
+        "violations": []
+      },
+      "target_values": {
+        "passed": true,
+        "found": [
+          0,
+          1
+        ]
+      },
+      "no_target_leakage": {
+        "passed": true
+      },
+      "infinite_values": {
+        "passed": true,
+        "count": 0
+      },
+      "missing_values": {
+        "passed": true,
+        "violations": []
+      },
+      "numerical_domains": {
+        "passed": true,
+        "violations": []
+      },
+      "categorical_domains": {
+        "passed": true,
+        "violations": []
+      },
+      "binary_constraints": {
+        "passed": true,
+        "violations": []
+      },
+      "class_distribution": {
+        "passed": true,
+        "positive_rate": 0.2818,
+        "acceptable_range": [
+          0.2,
+          0.4
+        ]
+      },
+      "duplicate_rows": {
+        "passed": true,
+        "count": 0
+      },
+      "schema_version": {
+        "passed": true,
+        "value": "1.0.0"
+      }
+    }
+  },
+  "chronic_kidney_disease": {
+    "disease_code": "CHRONIC_KIDNEY_DISEASE",
+    "dataset_identifier": "chronic_kidney_disease",
+    "valid": true,
+    "record_count": 5000,
+    "errors": [],
+    "warnings": [],
+    "checks": {
+      "record_count": {
+        "passed": true,
+        "actual": 5000,
+        "expected_range": [
+          4500,
+          5500
+        ]
+      },
+      "columns": {
+        "missing": [],
+        "unexpected": [],
+        "passed": true
+      },
+      "snake_case": {
+        "passed": true,
+        "violations": []
+      },
+      "target_values": {
+        "passed": true,
+        "found": [
+          0,
+          1
+        ]
+      },
+      "no_target_leakage": {
+        "passed": true
+      },
+      "infinite_values": {
+        "passed": true,
+        "count": 0
+      },
+      "missing_values": {
+        "passed": true,
+        "violations": []
+      },
+      "numerical_domains": {
+        "passed": true,
+        "violations": []
+      },
+      "categorical_domains": {
+        "passed": true,
+        "violations": []
+      },
+      "binary_constraints": {
+        "passed": true,
+        "violations": []
+      },
+      "class_distribution": {
+        "passed": true,
+        "positive_rate": 0.291,
+        "acceptable_range": [
+          0.25,
+          0.45
+        ]
+      },
+      "duplicate_rows": {
+        "passed": true,
+        "count": 0
+      },
+      "schema_version": {
+        "passed": true,
+        "value": "1.0.0"
+      }
+    }
+  },
+  "liver_disease": {
+    "disease_code": "LIVER_DISEASE",
+    "dataset_identifier": "liver_disease",
+    "valid": true,
+    "record_count": 5000,
+    "errors": [],
+    "warnings": [],
+    "checks": {
+      "record_count": {
+        "passed": true,
+        "actual": 5000,
+        "expected_range": [
+          4500,
+          5500
+        ]
+      },
+      "columns": {
+        "missing": [],
+        "unexpected": [],
+        "passed": true
+      },
+      "snake_case": {
+        "passed": true,
+        "violations": []
+      },
+      "target_values": {
+        "passed": true,
+        "found": [
+          0,
+          1
+        ]
+      },
+      "no_target_leakage": {
+        "passed": true
+      },
+      "infinite_values": {
+        "passed": true,
+        "count": 0
+      },
+      "missing_values": {
+        "passed": true,
+        "violations": []
+      },
+      "numerical_domains": {
+        "passed": true,
+        "violations": []
+      },
+      "categorical_domains": {
+        "passed": true,
+        "violations": []
+      },
+      "binary_constraints": {
+        "passed": true,
+        "violations": []
+      },
+      "class_distribution": {
+        "passed": true,
+        "positive_rate": 0.367,
+        "acceptable_range": [
+          0.28,
+          0.48
+        ]
+      },
+      "duplicate_rows": {
+        "passed": true,
+        "count": 0
+      },
+      "schema_version": {
+        "passed": true,
+        "value": "1.0.0"
+      }
+    }
+  },
+  "parkinsons": {
+    "disease_code": "PARKINSONS",
+    "dataset_identifier": "parkinsons",
+    "valid": true,
+    "record_count": 5000,
+    "errors": [],
+    "warnings": [],
+    "checks": {
+      "record_count": {
+        "passed": true,
+        "actual": 5000,
+        "expected_range": [
+          4500,
+          5500
+        ]
+      },
+      "columns": {
+        "missing": [],
+        "unexpected": [],
+        "passed": true
+      },
+      "snake_case": {
+        "passed": true,
+        "violations": []
+      },
+      "target_values": {
+        "passed": true,
+        "found": [
+          0,
+          1
+        ]
+      },
+      "no_target_leakage": {
+        "passed": true
+      },
+      "infinite_values": {
+        "passed": true,
+        "count": 0
+      },
+      "missing_values": {
+        "passed": true,
+        "violations": []
+      },
+      "numerical_domains": {
+        "passed": true,
+        "violations": []
+      },
+      "categorical_domains": {
+        "passed": true,
+        "violations": []
+      },
+      "binary_constraints": {
+        "passed": true,
+        "violations": []
+      },
+      "class_distribution": {
+        "passed": true,
+        "positive_rate": 0.344,
+        "acceptable_range": [
+          0.25,
+          0.45
+        ]
+      },
+      "duplicate_rows": {
+        "passed": true,
+        "count": 0
+      },
+      "schema_version": {
+        "passed": true,
+        "value": "1.0.0"
+      }
+    }
+  },
+  "breast_cancer": {
+    "disease_code": "BREAST_CANCER",
+    "dataset_identifier": "breast_cancer",
+    "valid": true,
+    "record_count": 5000,
+    "errors": [],
+    "warnings": [],
+    "checks": {
+      "record_count": {
+        "passed": true,
+        "actual": 5000,
+        "expected_range": [
+          4500,
+          5500
+        ]
+      },
+      "columns": {
+        "missing": [],
+        "unexpected": [],
+        "passed": true
+      },
+      "snake_case": {
+        "passed": true,
+        "violations": []
+      },
+      "target_values": {
+        "passed": true,
+        "found": [
+          0,
+          1
+        ]
+      },
+      "no_target_leakage": {
+        "passed": true
+      },
+      "infinite_values": {
+        "passed": true,
+        "count": 0
+      },
+      "missing_values": {
+        "passed": true,
+        "violations": []
+      },
+      "numerical_domains": {
+        "passed": true,
+        "violations": []
+      },
+      "categorical_domains": {
+        "passed": true,
+        "violations": []
+      },
+      "binary_constraints": {
+        "passed": true,
+        "violations": []
+      },
+      "class_distribution": {
+        "passed": true,
+        "positive_rate": 0.3412,
+        "acceptable_range": [
+          0.27,
+          0.47
+        ]
+      },
+      "duplicate_rows": {
+        "passed": true,
+        "count": 0
+      },
+      "schema_version": {
+        "passed": true,
+        "value": "1.0.0"
+      }
+    }
+  },
+  "lung_cancer": {
+    "disease_code": "LUNG_CANCER",
+    "dataset_identifier": "lung_cancer",
+    "valid": true,
+    "record_count": 5000,
+    "errors": [],
+    "warnings": [],
+    "checks": {
+      "record_count": {
+        "passed": true,
+        "actual": 5000,
+        "expected_range": [
+          4500,
+          5500
+        ]
+      },
+      "columns": {
+        "missing": [],
+        "unexpected": [],
+        "passed": true
+      },
+      "snake_case": {
+        "passed": true,
+        "violations": []
+      },
+      "target_values": {
+        "passed": true,
+        "found": [
+          0,
+          1
+        ]
+      },
+      "no_target_leakage": {
+        "passed": true
+      },
+      "infinite_values": {
+        "passed": true,
+        "count": 0
+      },
+      "missing_values": {
+        "passed": true,
+        "violations": []
+      },
+      "numerical_domains": {
+        "passed": true,
+        "violations": []
+      },
+      "categorical_domains": {
+        "passed": true,
+        "violations": []
+      },
+      "binary_constraints": {
+        "passed": true,
+        "violations": []
+      },
+      "class_distribution": {
+        "passed": true,
+        "positive_rate": 0.3322,
+        "acceptable_range": [
+          0.25,
+          0.45
+        ]
+      },
+      "duplicate_rows": {
+        "passed": true,
+        "count": 0
+      },
+      "schema_version": {
+        "passed": true,
+        "value": "1.0.0"
+      }
+    }
+  },
+  "hypertension": {
+    "disease_code": "HYPERTENSION",
+    "dataset_identifier": "hypertension",
+    "valid": true,
+    "record_count": 5000,
+    "errors": [],
+    "warnings": [],
+    "checks": {
+      "record_count": {
+        "passed": true,
+        "actual": 5000,
+        "expected_range": [
+          4500,
+          5500
+        ]
+      },
+      "columns": {
+        "missing": [],
+        "unexpected": [],
+        "passed": true
+      },
+      "snake_case": {
+        "passed": true,
+        "violations": []
+      },
+      "target_values": {
+        "passed": true,
+        "found": [
+          0,
+          1
+        ]
+      },
+      "no_target_leakage": {
+        "passed": true
+      },
+      "infinite_values": {
+        "passed": true,
+        "count": 0
+      },
+      "missing_values": {
+        "passed": true,
+        "violations": []
+      },
+      "numerical_domains": {
+        "passed": true,
+        "violations": []
+      },
+      "categorical_domains": {
+        "passed": true,
+        "violations": []
+      },
+      "binary_constraints": {
+        "passed": true,
+        "violations": []
+      },
+      "class_distribution": {
+        "passed": true,
+        "positive_rate": 0.37,
+        "acceptable_range": [
+          0.3,
+          0.5
+        ]
+      },
+      "duplicate_rows": {
+        "passed": true,
+        "count": 0
+      },
+      "schema_version": {
+        "passed": true,
+        "value": "1.0.0"
+      }
+    }
+  }
+}

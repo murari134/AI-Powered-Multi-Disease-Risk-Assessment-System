@@ -1,0 +1,234 @@
+# MediRisk 2.0 — Disease Dataset Specification: PARKINSONS
+# Schema Version: 1.0.0
+# Dataset Version: 1.0.0
+# Phase: 7A — Specification Only (no data generated yet)
+
+dataset_identifier: "parkinsons"
+dataset_version: "1.0.0"
+schema_version: "1.0.0"
+status: "SPECIFICATION_ONLY"
+created: "2026-09-26"
+
+disclaimer: >
+  This is a SYNTHETIC RESEARCH dataset. It does NOT represent real patient data
+  and has NOT been clinically validated. No medical decisions should be based
+  on this specification or any model trained on it.
+  Voice/biomarker features in this specification are prototype synthetic variables
+  and do NOT represent validated clinical biomarkers.
+
+# -----------------------------------------------
+# Target Definition
+# -----------------------------------------------
+target:
+  column: "parkinsons_outcome"
+  type: "binary"
+  negative_class:
+    value: 0
+    meaning: "No Parkinson's disease"
+  positive_class:
+    value: 1
+    meaning: "Parkinson's disease present"
+  task: "binary_classification"
+
+# -----------------------------------------------
+# Class Balance
+# -----------------------------------------------
+class_balance:
+  intended_positive_proportion: 0.35
+  acceptable_range: [0.25, 0.45]
+  validation_rule: "assert 0.25 <= positive_rate <= 0.45"
+  balance_justification: "Synthetic rate inflated for ML training utility. Not prevalence data."
+
+# -----------------------------------------------
+# Features
+# -----------------------------------------------
+features:
+  - name: "age"
+    type: "numerical"
+    unit: "years"
+    domain: [40, 90]
+    missing_allowed: false
+    description: "Age (Parkinson's primarily affects older adults)"
+
+  - name: "sex"
+    type: "categorical"
+    domain: ["male", "female"]
+    missing_allowed: false
+    description: "Biological sex"
+
+  - name: "vocal_jitter_pct"
+    type: "numerical"
+    unit: "percent"
+    domain: [0.0, 5.0]
+    missing_allowed: true
+    max_missing_pct: 20
+    description: >
+      PROTOTYPE SYNTHETIC VARIABLE: Voice jitter percentage —
+      cycle-to-cycle variation of fundamental frequency.
+      Not a validated clinical marker in this synthetic context.
+
+  - name: "vocal_shimmer_pct"
+    type: "numerical"
+    unit: "percent"
+    domain: [0.0, 20.0]
+    missing_allowed: true
+    max_missing_pct: 20
+    description: >
+      PROTOTYPE SYNTHETIC VARIABLE: Voice shimmer percentage —
+      cycle-to-cycle variation in amplitude.
+
+  - name: "nhr"
+    type: "numerical"
+    unit: "ratio"
+    domain: [0.0, 0.5]
+    missing_allowed: true
+    max_missing_pct: 20
+    description: >
+      PROTOTYPE SYNTHETIC VARIABLE: Noise-to-harmonic ratio in voice.
+
+  - name: "hnr"
+    type: "numerical"
+    unit: "dB"
+    domain: [5.0, 40.0]
+    missing_allowed: true
+    max_missing_pct: 20
+    description: >
+      PROTOTYPE SYNTHETIC VARIABLE: Harmonic-to-noise ratio in voice.
+
+  - name: "rpde"
+    type: "numerical"
+    unit: "score"
+    domain: [0.0, 1.0]
+    missing_allowed: true
+    max_missing_pct: 20
+    description: >
+      PROTOTYPE SYNTHETIC VARIABLE: Recurrence period density entropy.
+
+  - name: "dfa"
+    type: "numerical"
+    unit: "score"
+    domain: [0.0, 1.0]
+    missing_allowed: true
+    max_missing_pct: 20
+    description: >
+      PROTOTYPE SYNTHETIC VARIABLE: Detrended fluctuation analysis signal.
+
+  - name: "tremor_score"
+    type: "numerical"
+    unit: "score"
+    domain: [0, 10]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Self-reported tremor severity score (synthetic)"
+
+  - name: "rigidity_score"
+    type: "numerical"
+    unit: "score"
+    domain: [0, 10]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Self-reported muscle rigidity score (synthetic)"
+
+  - name: "bradykinesia_score"
+    type: "numerical"
+    unit: "score"
+    domain: [0, 10]
+    missing_allowed: true
+    max_missing_pct: 15
+    description: "Self-reported slowness of movement score (synthetic)"
+
+  - name: "family_history_parkinsons"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = first-degree relative with Parkinson's"
+
+  - name: "pesticide_exposure"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = reported significant pesticide exposure (synthetic)"
+
+  - name: "head_injury_history"
+    type: "binary"
+    domain: [0, 1]
+    missing_allowed: false
+    description: "1 = history of significant head injury (synthetic)"
+
+# -----------------------------------------------
+# Feature Category Lists
+# -----------------------------------------------
+numerical_features:
+  - age
+  - vocal_jitter_pct
+  - vocal_shimmer_pct
+  - nhr
+  - hnr
+  - rpde
+  - dfa
+  - tremor_score
+  - rigidity_score
+  - bradykinesia_score
+
+categorical_features:
+  - sex
+
+binary_features:
+  - family_history_parkinsons
+  - pesticide_exposure
+  - head_injury_history
+
+# -----------------------------------------------
+# Leakage Risks
+# -----------------------------------------------
+leakage_risks:
+  - field: "tremor_score"
+    risk: "HIGH"
+    note: >
+      Clinician-assessed tremor (e.g., UPDRS score) is part of
+      the Parkinson's diagnostic protocol. Self-reported synthetic
+      tremor is used here to avoid direct leakage. Clinician-scored
+      UPDRS values post-diagnosis are prohibited.
+  - field: "rigidity_score"
+    risk: "HIGH"
+    note: "Same restrictions as tremor_score."
+  - field: "bradykinesia_score"
+    risk: "HIGH"
+    note: "Same restrictions as tremor_score."
+  - field: "vocal_jitter_pct"
+    risk: "MEDIUM"
+    note: "Voice biomarkers are prototype synthetic variables; not validated clinical markers."
+
+# -----------------------------------------------
+# Prohibited Fields
+# -----------------------------------------------
+prohibited_fields:
+  - "updrs_total_score"
+  - "dopaminergic_medication"
+  - "deep_brain_stimulation"
+  - "diagnosis_date"
+  - "risk_level"
+  - "calibrated_probability"
+  - "prediction_result"
+
+# -----------------------------------------------
+# Dataset Generation Requirements (Phase 7B)
+# -----------------------------------------------
+generation:
+  method: "synthetic"
+  target_records: 5000
+  random_seed: 42
+  generator_version: "TBD"
+  validation_required: true
+  note: "DO NOT generate yet. Phase 7B only."
+
+# -----------------------------------------------
+# Preprocessing Requirements
+# -----------------------------------------------
+preprocessing:
+  numerical: "StandardScaler (fit on train only)"
+  categorical: "OrdinalEncoder (fit on train only)"
+  binary: "passthrough"
+  missing_numerical: "median imputation + missingness indicator"
+  missing_categorical: "most_frequent imputation + missingness indicator"
+  feature_order: "fixed — see features list above"

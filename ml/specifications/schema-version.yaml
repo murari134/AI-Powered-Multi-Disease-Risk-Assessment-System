@@ -1,0 +1,210 @@
+# MediRisk 2.0 — ML Specification Schema Version
+# ------------------------------------------------
+# This file is the authoritative version record for all
+# disease dataset specifications in MediRisk 2.0.
+#
+# IMPORTANT: Do NOT modify this file without bumping schema_version
+# and updating all 10 disease specification files accordingly.
+
+schema_version: "1.0.0"
+schema_created: "2026-09-26"
+schema_author: "MediRisk 2.0 ML Team"
+
+# ------------------------------------------------
+# Global Model Version Contract
+# These versions are FROZEN for Phase 7B experiments.
+# Do NOT silently change any version.
+# If a compatibility problem is found, STOP and document it.
+# ------------------------------------------------
+model_versions:
+  tabpfn: "9.0.0"
+  tabicl: "2.2.0"
+  torch: "2.14.0"
+  scikit_learn: "1.5.2"
+  numpy: "1.26.4"
+  pandas: "2.2.2"
+  shap: "0.46.0"
+
+# ------------------------------------------------
+# Global Dataset Contract
+# ------------------------------------------------
+dataset_contract:
+  target_convention:
+    negative: 0
+    positive: 1
+  task_type: "binary_classification"
+  record_target_per_disease: 5000
+  total_record_target: 50000
+  data_nature: "SYNTHETIC_RESEARCH"
+  clinical_validation: false
+  disclaimer: >
+    All datasets are synthetically generated for research and
+    development purposes only. They do NOT represent real patient
+    data and have NOT been clinically validated. No clinical
+    decisions should be made based on these datasets or any
+    model trained on them.
+
+# ------------------------------------------------
+# Data Split Contract
+# ------------------------------------------------
+data_split:
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+  stratified: true
+  random_seed: 42
+  seed_policy: >
+    All dataset generation, splitting, and experiment runs must
+    use random_seed=42 as the default. Any deviation must be
+    explicitly documented in the experiment manifest.
+
+# ------------------------------------------------
+# Feature Naming Rules
+# ------------------------------------------------
+feature_naming:
+  case: "lowercase"
+  format: "snake_case"
+  no_spaces: true
+  no_ambiguous_abbreviations: true
+  versioning_required_on_rename: true
+
+# ------------------------------------------------
+# Missing Value Global Policy
+# ------------------------------------------------
+missing_value_policy:
+  strategy: "per_feature"
+  max_allowed_missingness_pct: 20
+  missingness_indicator_required: true
+  note: >
+    Each disease specification defines per-feature missingness
+    policy. Preprocessing must be fit ONLY on training data.
+    Never impute using the full dataset before splitting.
+
+# ------------------------------------------------
+# Preprocessing Contract
+# ------------------------------------------------
+preprocessing_contract:
+  numerical:
+    strategy: "StandardScaler"
+    fit_on: "train_only"
+  categorical:
+    strategy: "OrdinalEncoder"
+    fit_on: "train_only"
+    unknown_handling: "use_encoded_value"
+  binary:
+    strategy: "passthrough"
+  feature_ordering: "fixed_by_specification"
+  leakage_prevention: >
+    Preprocessing must be fit ONLY on training data. The fitted
+    preprocessor must be applied to validation and test sets
+    without re-fitting.
+
+# ------------------------------------------------
+# Prohibited Leakage Field Classes
+# ------------------------------------------------
+leakage_prohibited_field_classes:
+  - post_diagnosis_treatment_outcomes
+  - final_diagnosis_labels_used_as_features
+  - future_clinical_outcomes
+  - prediction_derived_values
+  - manually_assigned_risk_categories
+  - fields_generated_from_target
+  - calibrated_probabilities
+  - risk_level_assignments
+
+# ------------------------------------------------
+# Validation Requirements (Applied to Every Dataset)
+# ------------------------------------------------
+validation_requirements:
+  - check: column_names
+  - check: column_order
+  - check: data_types
+  - check: missing_values
+  - check: duplicate_rows
+  - check: target_values
+  - check: numeric_ranges
+  - check: categorical_domains
+  - check: binary_values
+  - check: class_distribution
+  - check: leakage_checks
+  - check: infinite_values
+  - check: nan_values
+  - check: schema_version
+  - check: record_count
+
+# ------------------------------------------------
+# Reproducibility Contract
+# ------------------------------------------------
+reproducibility:
+  required_fields:
+    - dataset_version
+    - schema_version
+    - random_seed
+    - model_name
+    - model_version
+    - python_version
+    - dependency_versions
+    - preprocessing_version
+    - experiment_timestamp
+
+# ------------------------------------------------
+# Risk Engine Contract (Future Phase — NOT Phase 7A)
+# ------------------------------------------------
+risk_engine_contract:
+  status: "NOT_IMPLEMENTED"
+  future_phase: "Phase 8"
+  input: "calibrated_probability"
+  output_classes:
+    - "LOW"
+    - "MODERATE"
+    - "HIGH"
+  prototype_thresholds:
+    low: "< 0.30"
+    moderate: "0.30 – 0.70"
+    high: "> 0.70"
+  disclaimer: >
+    These thresholds are NOT clinically validated prototypes.
+    The ML model predicts disease-class probability only.
+    The application-level risk engine transforms probability
+    into LOW/MODERATE/HIGH in a separate layer.
+
+# ------------------------------------------------
+# Calibration Contract (Future Phase — NOT Phase 7A)
+# ------------------------------------------------
+calibration_contract:
+  status: "NOT_IMPLEMENTED"
+  candidate_method: "IsotonicRegression"
+  fit_on: "validation_only"
+  test_set_policy: "untouched_until_final_evaluation"
+  outputs:
+    - raw_probability
+    - calibrated_probability
+
+# ------------------------------------------------
+# Explainability Contract (Future Phase — NOT Phase 7A)
+# ------------------------------------------------
+explainability_contract:
+  status: "NOT_IMPLEMENTED"
+  library: "shap"
+  library_version: "0.46.0"
+  storage_target: "prediction_attributions"
+  causal_disclaimer: >
+    SHAP attribution values indicate feature contribution to
+    the model's prediction and must NOT be interpreted as
+    causal medical relationships.
+
+# ------------------------------------------------
+# Model Input Contract
+# ------------------------------------------------
+model_input_contract:
+  required_fields:
+    - disease_code
+    - dataset_version
+    - schema_version
+    - feature_vector
+  prohibited_fields:
+    - risk_level
+    - calibrated_probability
+    - prediction_result
+    - future_outcome
+    - post_prediction_information
